@@ -26,6 +26,7 @@ module.exports = {
       },
       isLike: {
         allowNull: false,
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
       createdAt: {

@@ -5,7 +5,7 @@ const models = require('../models');
 const asyncLib = require('async');
 const { model } = require('../config/dbconnect');
 
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
 
     //PARAMS
     let email = req.body.email;
@@ -31,7 +31,7 @@ exports.signup = (req, res, next) => {
                 done(null, userFound);
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify user' })
+                return res.status(500).json({ 'error': 'unable to verify user', err })
             });
         },
         function(userFound, done) {
@@ -55,7 +55,7 @@ exports.signup = (req, res, next) => {
                 done(newUser);
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error': 'cannot add user' });
+                return res.status(500).json({ 'error': 'cannot add user', err });
             });
         }
     ], function(newUser) {
@@ -69,7 +69,7 @@ exports.signup = (req, res, next) => {
     });
 }
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
 
@@ -86,7 +86,7 @@ exports.login = (req, res, next) => {
                 done(null, userFound);
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify user' })
+                return res.status(500).json({ 'error': 'unable to verify user', err })
             });
         },
         function(userFound, done) {
@@ -117,7 +117,7 @@ exports.login = (req, res, next) => {
     });
 }    
 
-exports.getUserProfile = (req,res, next) => {
+exports.getUserProfile = (req,res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
@@ -137,11 +137,11 @@ exports.getUserProfile = (req,res, next) => {
         }
     })
     .catch(function(err) {
-        res.status(500).json({ 'error': 'cannot fetch user' });
+        res.status(500).json({ 'error': 'cannot fetch user', err });
     })
 }
 
-exports.updateUserProfile = (req, res, next) => {
+exports.updateUserProfile = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
@@ -157,7 +157,7 @@ exports.updateUserProfile = (req, res, next) => {
                 done(null, userFound);
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify user' })
+                return res.status(500).json({ 'error': 'unable to verify user', err })
             });
         },
         function(userFound, done) {
@@ -169,7 +169,7 @@ exports.updateUserProfile = (req, res, next) => {
                     done(userFound);
                 })
                 .catch(function(err) {
-                    return res.status(500).json({ 'error': 'cannot update user' });
+                    return res.status(500).json({ 'error': 'cannot update user', err });
                 });
             } else {
                 res.status(404).json({ 'error': 'user not found' });

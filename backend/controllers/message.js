@@ -7,7 +7,7 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT = 50;
 
-exports.createMessage = (req, res, next) => {
+exports.createMessage = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
@@ -31,7 +31,7 @@ exports.createMessage = (req, res, next) => {
                done(null, userFound);
            })
            .catch(function(err) {
-               return res.status(500).json({ 'error': 'unable to verify user' });
+               return res.status(500).json({ 'error': 'unable to verify user', err });
            });
         },
         function(userFound, done) {
@@ -58,7 +58,7 @@ exports.createMessage = (req, res, next) => {
     });
 }
 
-exports.listMessage = (req, res, next) => {
+exports.listMessage = (req, res) => {
     let fields = req.query.fields;
     let limit = parseInt(req.query.limit);
     let offset = parseInt(req.query.offset);
@@ -86,6 +86,6 @@ exports.listMessage = (req, res, next) => {
         }
     })
     .catch(function(err) {
-        res.status(500).json({ 'error' : 'invalid fields' });
+        res.status(500).json({ 'error' : 'invalid fields', err });
     })
 }
