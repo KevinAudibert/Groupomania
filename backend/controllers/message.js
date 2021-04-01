@@ -73,10 +73,10 @@ exports.listMessage = (req, res) => {
         attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
         limit: (!isNaN(limit)) ? limit : null,
         offset: (!isNaN(offset)) ? offset : null,
-        include: [{
+        /*include: [{
             model: models.User,
             attributes: [ 'username' ]
-        }]
+        }]*/
     })
     .then(function(messages) {
         if (messages) {

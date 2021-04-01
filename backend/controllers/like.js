@@ -24,7 +24,7 @@ exports.likePost = (req, res) => {
                 done(null, messageFound);
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify message', err });
+                return res.status(500).json({ 'error': 'impossible de récuperer ID du message', err });
             })
         },
         function(messageFound, done) {
@@ -36,10 +36,10 @@ exports.likePost = (req, res) => {
                     done(null, messageFound, userFound);
                 })
                 .catch(function(err) {
-                    return res.status(500).json({ 'error': 'unable to verify user', err });
+                    return res.status(500).json({ 'error': 'impossible de récuperer ID utilisateur', err });
                 })
             } else {
-                res.status(404).json({ 'error': 'post not found' });
+                res.status(404).json({ 'error': 'message inexistant' });
             }
         },
         function(messageFound, userFound, done) {
@@ -57,7 +57,7 @@ exports.likePost = (req, res) => {
                     return res.status(500).json({ 'error': 'unable to verify is user already liked', err });
                 })
             } else {
-                res.status(404).json({ 'error': 'user not exist' });
+                res.status(404).json({ 'error': 'utilisateur inexistant' });
             }
         },
         function(messageFound, userFound, userAlreadyLikedFound, done) {
