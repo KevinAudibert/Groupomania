@@ -67,7 +67,7 @@ exports.likePost = (req, res) => {
                     done(null, messageFound, userFound);
                 })
                 .catch(function(err) {
-                    return res.status(500).json({ 'message': 'unable to set user reaction', err });
+                    return res.status(500).json({ 'message': 'impossible de prendre en compte like utilisateur', err });
                 });
             } else {
                 if (userAlreadyLikedFound.isLike === DISLIKED) {
