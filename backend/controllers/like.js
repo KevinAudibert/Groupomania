@@ -78,10 +78,10 @@ exports.likePost = (req, res) => {
                         done(null, messageFound, userFound);
                     })
                     .catch(function(err) {
-                        return res.status(500).json({ 'error': 'cannot update user reaction', err });
+                        return res.status(500).json({ 'error': 'impossible de mettre à jour le like utilisateur', err });
                     });
                 } else {
-                    return res.status(409).json({ 'error': 'message already liked'})
+                    return res.status(409).json({ 'error': 'message déjà liked' })
                 }
             }
         },
@@ -93,7 +93,7 @@ exports.likePost = (req, res) => {
                 done(messageFound)
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error' :' cannot update message like counter', err });
+                return res.status(500).json({ 'error' :' impossible de faire le décompte du nombre de like', err });
             })
         }
     ], function(messageFound) {
