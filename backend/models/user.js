@@ -11,18 +11,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.User.hasMany(models.Message);
-    }
-  };
-  User.init({
-    email: DataTypes.STRING,
-    username: DataTypes.STRING,
-    password: DataTypes.STRING,
-    bio: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+      models.User.hasMany(models.Message, {
+        foreignKey: { allowNull: false },
+        onDelete: 'CASCADE' })
+    };
+};
+User.init({
+  email: DataTypes.STRING,
+  username: DataTypes.STRING,
+  password: DataTypes.STRING,
+  bio: DataTypes.STRING,
+  isAdmin: DataTypes.BOOLEAN
+}, {
+  sequelize,
+  modelName: 'User',
+});
   return User;
 };

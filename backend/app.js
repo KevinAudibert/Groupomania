@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
-const likeRoutes = require('./routes/like');
 const sequelize = require('./config/dbconnect');
 
 const app = express();
@@ -35,6 +34,5 @@ app.use(limiter);
 
 app.use('/api/users/', userRoutes);
 app.use('/api/messages/', messageRoutes);
-app.use('/api/likes/', likeRoutes);
 
 module.exports = app;

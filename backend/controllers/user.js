@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
-const asyncLib = require('async');
 const { model } = require('../config/dbconnect');
 
 exports.signup = (req, res) => {
@@ -13,60 +12,44 @@ exports.signup = (req, res) => {
     let password = req.body.password;
     let bio = req.body.bio;
 
-    if (username.length >= 13 || username.length <= 4) {
-        return res.status(400).json({ 'error': 'wrong username (must be length 5 - 12)' })
+    if (username.length >= 16 || username.length <= 2) {
+        return res.status(400).json({ 'erreur': `Mauvais Nom d'Utilisateur (Caractères requis entre 3 et 17)` })
     } if (!validator.isEmail(email) || email == null) {
-        return res.status(400).json({ 'error': 'invalid email, enter a valid address' })
+        return res.status(400).json({ 'erreur': `Format d'Adresse Email Non Valide ou Manquante` })
     } if (!validator.isStrongPassword(password) || password == null) {
-        return res.status(400).json({ 'error': 'invalid password'});
+        return res.status(400).json({ 'erreur': `Format du Mot de Passe Non Valide ou Manquant` });
     }
 
-    asyncLib.waterfall([
-        function(done) {
-            models.User.findOne({
-                attributes: ['email'],
-                where: { email: email }
+    models.User.findOne({
+        attributes: ['email'],
+        where:  { email: email }
+    })
+    .then(function(userFound) {
+        if (!userFound) {
+            bcrypt.hash(password, 5, function(err, bcryptedPassword) {
+                let newUser = models.User.create({
+                    email: email,
+                    username: username,
+                    password: bcryptedPassword,
+                    bio: bio,
+                    isAdmin: 0
+                })
+                .then(function(newUser) {
+                    return res.status(201).json({
+                        'userId': newUser.id
+                    })
+                })
+                .catch(function(err) {
+                    res.status(500).json({ 'erreur' : `Impossible d'ajouter un nouvel utilisateur`, err })
+                })
             })
-            .then(function(userFound) {
-                done(null, userFound);
-            })
-            .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify user', err })
-            });
-        },
-        function(userFound, done) {
-            if (!userFound) {
-                bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
-                    done(null, userFound, bcryptedPassword);
-                });
-            } else {
-                return res.status(409).json({ 'error': 'user already exist' });
-            }
-        },
-        function(userFound, bcryptedPassword, done) {
-            let newUser = models.User.create({
-                email: email,
-                username: username,
-                password: bcryptedPassword,
-                bio: bio,
-                isAdmin: 0
-            })
-            .then(function(newUser) {
-                done(newUser);
-            })
-            .catch(function(err) {
-                return res.status(500).json({ 'error': 'cannot add user', err });
-            });
-        }
-    ], function(newUser) {
-        if (newUser) {
-            return res.status(201).json({
-                'userId': newUser.id
-            });
         } else {
-            return res.status(500).json({ 'error': 'cannot add user' });
+            return res.status(409).json({ 'erreur' : `L'utilisateur existe déjà dans la BDD` })
         }
-    });
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })
+    })
 }
 
 exports.login = (req, res) => {
@@ -74,55 +57,39 @@ exports.login = (req, res) => {
     let password = req.body.password;
 
     if (email == null || password == null) {
-        return res.status(400).json({ 'error': 'missing parameters '});
+        return res.status(400).json({ 'erreur': `Paramètres Manquants` });
     }
 
-    asyncLib.waterfall([
-        function(done) {
-            models.User.findOne({
-                where: { email: email }
+    models.User.findOne({
+        where: { email: email }
+    })
+    .then(function(userFound) {
+        if(userFound) {
+            bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
+                if(resBycrypt) {
+                    return res.status(200).json({
+                        'userId': userFound.id,
+                        'token': jwtUtils.generateTokenForUser(userFound)
+                    })
+                } else {
+                    return res.status(403).json({ 'erreur': `Mot de Passe incorrect`})
+                }
             })
-            .then(function(userFound) {
-                done(null, userFound);
-            })
-            .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify user', err })
-            });
-        },
-        function(userFound, done) {
-            if (userFound) {
-                bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
-                    done(null, userFound, resBycrypt);
-                });
-            } else {
-                return res.status(404).json({ 'error': 'user not exist in DB' });
-            }
-        },
-        function(userFound, resBycrypt, done) {
-            if (resBycrypt) {
-                done(userFound);
-            } else {
-                return res.status(403).json({ 'error': 'invalid password'});
-            }
-        }
-    ], function(userFound) {
-        if (userFound) {
-            return res.status(201).json({
-                'userId': userFound.id,
-                'token': jwtUtils.generateTokenForUser(userFound)
-            });
         } else {
-            return res.status(500).json({ 'error': 'cannot log on user' });
+            return res.status(404).json({ 'erreur' : `L'utilisateur n'existe pas dans la BDD` })
         }
-    });
-}    
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })
+    })
+}  
 
-exports.getUserProfile = (req,res) => {
+exports.getUserProfile = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(400).json({ 'error': 'wrong Token' })
+        return res.status(400).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
@@ -133,11 +100,11 @@ exports.getUserProfile = (req,res) => {
         if (user) {
             res.status(201).json(user)
         } else {
-            res.status(404).json({ 'error': 'user not found' })
+            res.status(404).json({ 'erreur': `L'utilisateur n'est pas trouvé dans la BDD` })
         }
     })
     .catch(function(err) {
-        res.status(500).json({ 'error': 'cannot fetch user', err });
+        res.status(500).json({ 'erreur': `Impossible de vérifier l'utilisateur dans la BDD`, err });
     })
 }
 
@@ -147,39 +114,43 @@ exports.updateUserProfile = (req, res) => {
 
     let bio = req.body.bio;
 
-    asyncLib.waterfall([
-        function(done) {
-            models.User.findOne({
-                attributes: ['id', 'bio'],
-                where: { id: userId }
+    models.User.findOne({
+        attributes: [ 'id', 'bio' ],
+        where: { id: userId }
+    })
+    .then(function(userFound) {
+        if (userFound.bio !== bio) {
+            userFound.update({
+                bio: (bio ? bio : userFound.bio)
             })
-            .then(function(userFound) {
-                done(null, userFound);
+            .then(function() {
+                res.status(201).json(userFound)
             })
             .catch(function(err) {
-                return res.status(500).json({ 'error': 'unable to verify user', err })
-            });
-        },
-        function(userFound, done) {
-            if (userFound) {
-                userFound.update({
-                    bio: (bio ? bio : userFound.bio)
-                })
-                .then(function() {
-                    done(userFound);
-                })
-                .catch(function(err) {
-                    return res.status(500).json({ 'error': 'cannot update user', err });
-                });
-            } else {
-                res.status(404).json({ 'error': 'user not found' });
-            }
-        },
-    ], function(userFound) {
-        if (userFound) {
-            return res.status(201).json(userFound);
+                res.status(500).json({ 'erreur' : `Impossible de mettre à jour la Bio de l'utilisateur`, err })
+            })
         } else {
-            return res.status(500).json({ 'error': 'cannot update user profile' });
+            res.status(404).json({ 'erreur': `Mise à jour impossible, Biographie identique` })
         }
-    });
-}    
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })
+    })
+}
+
+exports.deleteUserProfile = (req, res) => {
+    let headerAuth = req.headers['authorization'];
+    let userId = jwtUtils.getUserId(headerAuth);
+
+    models.User.findOne({
+        where: { id: userId }
+    })
+    .then(function(userFound) {
+        userFound.destroy({
+            where: userFound.id
+        })
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })        
+    })
+}
