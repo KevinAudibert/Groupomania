@@ -3,6 +3,7 @@ const validator = require('validator');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
 const { model } = require('../config/dbconnect');
+const user = require('../models/user');
 
 exports.signup = (req, res) => {
 
@@ -124,13 +125,13 @@ exports.updateUserProfile = (req, res) => {
                 bio: (bio ? bio : userFound.bio)
             })
             .then(function() {
-                res.status(201).json(userFound)
+                return res.status(201).json( `Biographie modifié avec succès` )
             })
             .catch(function(err) {
                 res.status(500).json({ 'erreur' : `Impossible de mettre à jour la Bio de l'utilisateur`, err })
             })
         } else {
-            res.status(404).json({ 'erreur': `Mise à jour impossible, Biographie identique` })
+            res.status(200).json( `Mise à jour inutile, texte identique` )
         }
     })
     .catch(function(err) {
@@ -146,9 +147,27 @@ exports.deleteUserProfile = (req, res) => {
         where: { id: userId }
     })
     .then(function(userFound) {
-        userFound.destroy({
-            where: userFound.id
-        })
+            models.Message.destroy({
+                where: {
+                    userId: userFound.id
+                }
+            })
+            .then(function() {
+                models.User.destroy({
+                    where: {
+                        id: userFound.id
+                    }
+                })
+                .then(function() {
+                    return res.status(201).json('Le Profil a été supprimé')
+                })
+                .catch(function(err) {
+                    return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Profil`, err }) 
+                })
+            })
+            .catch(function(err) {
+                return res.status(404).json({ 'erreur' : `Impossible de Supprimer les messages`, err })  
+            })              
     })
     .catch(function(err) {
         return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })        

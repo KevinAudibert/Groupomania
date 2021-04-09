@@ -40,7 +40,7 @@ exports.createMessage = (req, res) => {
                     title: title,
                     content: content,
                     likes: 0,
-                    UserId: userFound.id
+                    userId: userFound.id
                 })
                 .then(function(newMessage) {
                     done(newMessage);
