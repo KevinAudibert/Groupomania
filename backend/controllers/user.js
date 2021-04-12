@@ -3,7 +3,9 @@ const validator = require('validator');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
 const { model } = require('../config/dbconnect');
-const user = require('../models/user');
+
+const userNameMinLimit = 2
+const userNameMaxLimit = 16
 
 exports.signup = (req, res) => {
 
@@ -13,7 +15,7 @@ exports.signup = (req, res) => {
     let password = req.body.password;
     let bio = req.body.bio;
 
-    if (username.length >= 16 || username.length <= 2) {
+    if (username.length >= userNameMaxLimit || username.length <= userNameMinLimit) {
         return res.status(400).json({ 'erreur': `Mauvais Nom d'Utilisateur (Caractères requis entre 3 et 17)` })
     } if (!validator.isEmail(email) || email == null) {
         return res.status(400).json({ 'erreur': `Format d'Adresse Email Non Valide ou Manquante` })
@@ -159,7 +161,7 @@ exports.deleteUserProfile = (req, res) => {
                     }
                 })
                 .then(function() {
-                    return res.status(201).json('Le Profil a été supprimé')
+                    return res.status(201).json( 'Profil Supprimé avec Succès' )
                 })
                 .catch(function(err) {
                     return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Profil`, err }) 
