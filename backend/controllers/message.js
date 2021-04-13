@@ -1,7 +1,6 @@
 const models = require('../models');
 const jwtUtils = require('../utils/jwt.utils');
 const { model } = require('../config/dbconnect');
-const message = require('../models/message');
 
 const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
@@ -34,7 +33,7 @@ exports.createMessage = (req, res) => {
                 UserId: userFound.id
             })
             .then(function() {
-                return res.status(201).json( `Message Créé avec Succès` )
+                return res.status(201).json({ 'message' : `Message Créé avec Succès` })
             })
             .catch(function(err) {
                 res.status(500).json({ 'erreur' : `Impossible de Créer le Message`, err })
@@ -133,13 +132,13 @@ exports.updateMessage = (req, res) => {
                     content: (content ? content : messageFound.content)
                 })
                 .then(function() {
-                    res.status(201).json(`Titre/Contenu Modifié avec Succès`)
+                    res.status(201).json({ 'message' : `Titre / Contenu Modifié avec Succès` })
                 })
                 .catch(function(err) {
                     res.status(404).json({ 'erreur' : `Impossible de Mettre à Jour le Titre/Contenu du Message`, err })
                 })
             } else {
-                res.status(200).json( `Mise à Jour Inutile, Titre ou Contenu Identique` )
+                res.status(200).json({ 'message' : `Mise à Jour Inutile, Titre et Contenu Identique` })
             }
         })
         .catch(function(err) {
@@ -149,4 +148,38 @@ exports.updateMessage = (req, res) => {
     .catch(function(err) {
         return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })
     })
+}
+
+exports.getOneMessageUserId = (req, res) => {
+    let headerAuth = req.headers['authorization'];
+    let userId = jwtUtils.getUserId(headerAuth);
+
+    models.User.findOne({
+        where: { id: userId }
+    })
+    .then(function(userFound) {
+        models.Message.findOne({
+            where: {
+                userId: userFound.id,
+                id: req.params.id
+            }
+        })
+        .then(function(messageFound) {
+            if (messageFound !== null) {
+                res.status(201).json(messageFound)
+            } else {
+                res.status(404).json({ 'message' : `Auncun Message Trouvé`})
+            }
+        })
+        .catch(function(err) {
+            res.status(500).json({ 'erreur': `Recherche Messages Impossible`, err })
+        })
+    })
+    .catch(function(err) {
+        return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })
+    })
+}
+
+exports.deleteMessage = (req, res) => {
+
 }

@@ -127,13 +127,13 @@ exports.updateUserProfile = (req, res) => {
                 bio: (bio ? bio : userFound.bio)
             })
             .then(function() {
-                return res.status(201).json( `Biographie modifié avec succès` )
+                return res.status(201).json({ 'message' : `Biographie modifié avec succès` })
             })
             .catch(function(err) {
                 res.status(500).json({ 'erreur' : `Impossible de mettre à jour la Bio de l'utilisateur`, err })
             })
         } else {
-            res.status(200).json( `Mise à jour inutile, texte identique` )
+            res.status(200).json({ 'message' : `Mise à jour inutile, texte identique` })
         }
     })
     .catch(function(err) {
@@ -161,7 +161,7 @@ exports.deleteUserProfile = (req, res) => {
                     }
                 })
                 .then(function() {
-                    return res.status(201).json( 'Profil Supprimé avec Succès' )
+                    return res.status(201).json({ 'message' : 'Profil Supprimé avec Succès' })
                 })
                 .catch(function(err) {
                     return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Profil`, err }) 
