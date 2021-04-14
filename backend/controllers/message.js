@@ -168,7 +168,7 @@ exports.getOneMessageUserId = (req, res) => {
             if (messageFound !== null) {
                 res.status(201).json(messageFound)
             } else {
-                res.status(404).json({ 'message' : `Auncun Message Trouvé`})
+                res.status(404).json({ 'message' : `Message introuvable`})
             }
         })
         .catch(function(err) {
