@@ -6,6 +6,7 @@ const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
 const sequelize = require('./config/dbconnect');
+const path = require('path')
 
 const app = express();
 
@@ -31,6 +32,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(helmet());
 app.use(limiter);
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/users/', userRoutes);
 app.use('/api/messages/', messageRoutes);

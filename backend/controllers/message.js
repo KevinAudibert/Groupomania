@@ -6,7 +6,7 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT = 50;
 
-exports.createMessage = (req, res) => {
+exports.createMessage = (req, res, next) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
@@ -29,6 +29,7 @@ exports.createMessage = (req, res) => {
             models.Message.create({
                 title: title,
                 content: content,
+                //images: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
                 likes: 0,
                 UserId: userFound.id
             })

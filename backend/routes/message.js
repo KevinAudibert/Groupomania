@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const messageCtrl = require('../controllers/message');
+const multer = require('../middleware/multer-config')
 
-router.post('/new', messageCtrl.createMessage)
+router.post('/new', multer, messageCtrl.createMessage)
 router.get('/', messageCtrl.listMessage)
 router.get('/myMessages', messageCtrl.listMessageUserId)
 router.get('/myMessages/:id', messageCtrl.getOneMessageUserId)
