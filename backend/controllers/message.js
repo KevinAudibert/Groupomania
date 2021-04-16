@@ -116,6 +116,10 @@ exports.updateMessage = (req, res) => {
     let title = req.body.title;
     let content = req.body.content;
 
+    if(!content || !title) {
+         return res.status(400).json({'erreur' : 'bad request'})
+    }
+
     models.User.findOne({
         where: { id: userId }
     })
@@ -128,6 +132,7 @@ exports.updateMessage = (req, res) => {
         })
         .then(function(messageFound) {
             if (messageFound.title !== title || messageFound.content !== content) {
+                console.log(req.body)
                 messageFound.update({
                     title: (title ? title : messageFound.title),
                     content: (content ? content : messageFound.content)
