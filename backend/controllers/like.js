@@ -24,7 +24,6 @@ exports.likeMessage = (req,res) => {
                 models.Like.create({
                     messageId: req.params.id,
                     userId: userId,
-                    isLike: +1
                 })
                 .then(function() {
                     messageFound.update({
@@ -41,7 +40,7 @@ exports.likeMessage = (req,res) => {
                     res.status(500).json({ 'erreur' : `Impossible d'Aimer le Message`, err })
                 })
             } else {
-                res.status(400).json({ 'message' : `message déjà like`})
+                res.status(400).json({ 'message' : `Message déjà like`})
             }
         })
         .catch(function(err) {

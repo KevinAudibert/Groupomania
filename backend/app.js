@@ -7,7 +7,7 @@ const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
 const likeRoutes = require('./routes/like')
 const sequelize = require('./config/dbconnect');
-const path = require('path')
+const path = require('path');
 
 const app = express();
 
