@@ -2,35 +2,53 @@ const models = require('../models');
 const jwtUtils = require('../utils/jwt.utils');
 const { model } = require('../config/dbconnect');
 
+const like = 1;
+const dislike = -1;
+
 exports.likeMessage = (req,res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
-    models.User.findOne({
-        where: { id: userId }
+    models.Message.findOne({
+        where: { id: req.params.id }
     })
-    .then(function(userFound) {
-        models.Message.findOne({
+    .then(function(messageFound) {
+        models.Like.findOne({
             where: {
-                userId: userFound.id,
-                id: req.params.id
+                messageId: messageFound.id,
+                userId: userId,
             }
         })
-        .then(function(messageFound) {
-            if (messageFound !== null) {
-                messageFound.addUser(userId, { isLike: LIKED})
+        .then(function(likeFound) {
+            if(!likeFound){
+                models.Like.create({
+                    messageId: req.params.id,
+                    userId: userId,
+                    isLike: +1
+                })
                 .then(function() {
-
+                    messageFound.update({
+                        likes: messageFound.likes + like
+                    })
+                    .then(function() {
+                        res.status(201).json({ 'message' : `J'aime le Message`})
+                    })
+                    .catch(function(err) {
+                        res.status(500).json({ 'erreur' : `Impossible de Mettre à jour le Like`, err })
+                    })
+                })
+                .catch(function(err) {
+                    res.status(500).json({ 'erreur' : `Impossible d'Aimer le Message`, err })
                 })
             } else {
-                res.status(404).json({ 'message' : `Message introuvable`})
+                res.status(400).json({ 'message' : `message déjà like`})
             }
         })
         .catch(function(err) {
-            res.status(500).json({ 'erreur': `Recherche Messages Impossible`, err })
+            res.status(404).json({ 'erreur' : `Like Introuvable`, err })
         })
     })
     .catch(function(err) {
-        return res.status(500).json({ 'erreur' : `Impossible de Vérifier l'Utilisateur dans la BDD`, err })
+        res.status(404).json({ 'erreur' : `Message Introuvable`, err })
     })
 }
