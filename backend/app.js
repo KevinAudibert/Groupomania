@@ -38,6 +38,6 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/users/', userRoutes);
 app.use('/api/messages/', messageRoutes);
-app.use('/api/messages/votes', likeRoutes);
+app.use('/api/messages/', likeRoutes);
 
 module.exports = app;
