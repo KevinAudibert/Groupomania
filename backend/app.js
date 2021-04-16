@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
+const likeRoutes = require('./routes/like')
 const sequelize = require('./config/dbconnect');
 const path = require('path')
 
@@ -37,5 +38,6 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/users/', userRoutes);
 app.use('/api/messages/', messageRoutes);
+app.use('/api/messages/votes', likeRoutes);
 
 module.exports = app;
