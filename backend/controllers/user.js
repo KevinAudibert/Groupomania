@@ -150,15 +150,11 @@ exports.deleteUserProfile = (req, res) => {
     })
     .then(function(userFound) {
             models.Message.destroy({
-                where: {
-                    userId: userFound.id
-                }
+                where: { userId: userFound.id }
             })
             .then(function() {
                 models.User.destroy({
-                    where: {
-                        id: userFound.id
-                    }
+                    where: { id: userFound.id }
                 })
                 .then(function() {
                     return res.status(201).json({ 'message' : 'Profil Supprimé avec Succès' })

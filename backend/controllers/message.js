@@ -1,5 +1,6 @@
 const models = require('../models');
 const jwtUtils = require('../utils/jwt.utils');
+const fs = require('fs')
 const { model } = require('../config/dbconnect');
 
 const TITLE_LIMIT = 2;
@@ -25,26 +26,38 @@ exports.createMessage = (req, res) => {
         where: { id: userId }
     })
     .then(function(userFound) {
-        if(userFound) {
-            models.Message.create({
+        if(req.file == undefined) {
+            return models.Message.create({
                 title: title,
                 content: content,
-                //images: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+                images: null,
                 likes: 0,
                 UserId: userFound.id
             })
-            .then(function() {
-                return res.status(201).json({ 'message' : `Message Créé avec Succès` })
+            .then(function(message) {
+                return res.status(201).json({ 'message' : `Message Créé avec Succès`, message })
             })
             .catch(function(err) {
                 res.status(500).json({ 'erreur' : `Impossible de Créer le Message`, err })
             })
         } else {
-            res.status(404).json({ 'erreur': `Utilisateur Introuvable`})
+            return models.Message.create({
+                title: title,
+                content: content,
+                images: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+                likes: 0,
+                UserId: userFound.id
+            })
+            .then(function(messageImg) {
+                return res.status(201).json({ 'message' : `Message Créé avec Succès`, messageImg })
+            })
+            .catch(function(err) {
+                res.status(500).json({ 'erreur' : `Impossible de Créer le Message`, err })
+            })
         }
     })
     .catch(function(err) {
-        res.status(500).json({ 'erreur': `Impossible de Vérifier l'Utilisateur dans la BDD`, err });
+        return res.status(500).json({ 'erreur': `Impossible de Vérifier l'Utilisateur dans la BDD`, err });
     })
 }
 
@@ -115,9 +128,10 @@ exports.updateMessage = (req, res) => {
 
     let title = req.body.title;
     let content = req.body.content;
+    //let imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
 
     if(!content || !title) {
-         return res.status(400).json({'erreur' : 'bad request'})
+         return res.status(400).json({ 'erreur' : 'bad request' })
     }
 
     models.User.findOne({
@@ -131,11 +145,18 @@ exports.updateMessage = (req, res) => {
             }
         })
         .then(function(messageFound) {
+            //let othername = imageUrl.split('/images/')[1]
+            let filename = messageFound.imageUrl.split('images/')[1]
+
             if (messageFound.title !== title || messageFound.content !== content) {
-                console.log(req.body)
+                //let filename = messageFound.images.split('/images/')[1]
+                //let imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+
+                fs.unlink(`images/${filename}`, () => {
                 messageFound.update({
                     title: (title ? title : messageFound.title),
-                    content: (content ? content : messageFound.content)
+                    content: (content ? content : messageFound.content),
+                    //images: (images ? images : imageUrl)
                 })
                 .then(function() {
                     res.status(201).json({ 'message' : `Titre / Contenu Modifié avec Succès` })
@@ -143,8 +164,12 @@ exports.updateMessage = (req, res) => {
                 .catch(function(err) {
                     res.status(404).json({ 'erreur' : `Impossible de Mettre à Jour le Titre/Contenu du Message`, err })
                 })
+                })
             } else {
+                console.log(messageFound.images.split('/images/')[1])
+                //fs.unlink(`images/${filename}`, () => {
                 res.status(200).json({ 'message' : `Mise à Jour Inutile, Titre et Contenu Identique` })
+                //})
             }
         })
         .catch(function(err) {
@@ -152,7 +177,7 @@ exports.updateMessage = (req, res) => {
         })
     })
     .catch(function(err) {
-        return res.status(500).json({ 'erreur' : `Impossible de Vérifier l'Utilisateur dans la BDD`, err })
+        res.status(500).json({ 'erreur' : `Impossible de Vérifier l'Utilisateur dans la BDD`, err })
     })
 }
 
