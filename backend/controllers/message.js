@@ -8,20 +8,26 @@ const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT = 50;
 
 exports.createMessage = (req, res) => {
+
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
     let title = req.body.title;
     let content = req.body.content;
 
-    if (title == null || content == null) {
+    if (title == '' || content == '') {
+        if(req.file != undefined) {
+            let imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+            let imageName = imageUrl.split('/images/')[1]
+            fs.unlinkSync(`images/${imageName}`)
+        }
         return res.status(400).json({ 'erreur': `Paramètres Manquants` });
     }
 
     if (title.length <= TITLE_LIMIT || content.length <= CONTENT_LIMIT) {
-        return res.status(400).json({ 'erreur': `Longueur du Titre et/ou du Contenu Trop Court` });
+        return res.status(400).json({ 'erreur': `Longueur du Titre et / ou du Contenu Trop Court` });
     }
-
+    
     models.User.findOne({
         where: { id: userId }
     })
@@ -34,8 +40,8 @@ exports.createMessage = (req, res) => {
                 likes: 0,
                 UserId: userFound.id
             })
-            .then(function(message) {
-                return res.status(201).json({ 'message' : `Message Créé avec Succès`, message })
+            .then(function() {
+                return res.status(201).json({ 'message' : `Message Créé avec Succès` })
             })
             .catch(function(err) {
                 res.status(500).json({ 'erreur' : `Impossible de Créer le Message`, err })
@@ -48,8 +54,8 @@ exports.createMessage = (req, res) => {
                 likes: 0,
                 UserId: userFound.id
             })
-            .then(function(messageImg) {
-                return res.status(201).json({ 'message' : `Message Créé avec Succès`, messageImg })
+            .then(function() {
+                return res.status(201).json({ 'message' : `Message avec Image Créé avec Succès` })
             })
             .catch(function(err) {
                 res.status(500).json({ 'erreur' : `Impossible de Créer le Message`, err })
