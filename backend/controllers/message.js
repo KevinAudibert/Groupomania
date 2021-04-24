@@ -7,6 +7,10 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT = 50;
 
+function deleteImg(path) {
+    
+}
+
 exports.createMessage = (req, res) => {
 
     let headerAuth = req.headers['authorization'];
@@ -129,15 +133,18 @@ exports.listMessageUserId = (req, res) => {
 }
 
 exports.updateMessage = (req, res) => {
+
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
     let title = req.body.title;
     let content = req.body.content;
-    //let imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
 
-    if(!content || !title) {
-         return res.status(400).json({ 'erreur' : 'bad request' })
+    if (title == '' || content == '') {
+        return res.status(400).json({ 'erreur': `Paramètres Manquants` });
+    }
+    if (title.length <= TITLE_LIMIT || content.length <= CONTENT_LIMIT) {
+        return res.status(400).json({ 'erreur': `Longueur du Titre et / ou du Contenu Trop Court` });
     }
 
     models.User.findOne({
@@ -151,39 +158,27 @@ exports.updateMessage = (req, res) => {
             }
         })
         .then(function(messageFound) {
-            //let othername = imageUrl.split('/images/')[1]
-            let filename = messageFound.imageUrl.split('images/')[1]
-
-            if (messageFound.title !== title || messageFound.content !== content) {
-                //let filename = messageFound.images.split('/images/')[1]
-                //let imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-
-                fs.unlink(`images/${filename}`, () => {
+            if(messageFound != null) {
                 messageFound.update({
-                    title: (title ? title : messageFound.title),
-                    content: (content ? content : messageFound.content),
-                    //images: (images ? images : imageUrl)
+                    title: title,
+                    content: content
                 })
-                .then(function() {
-                    res.status(201).json({ 'message' : `Titre / Contenu Modifié avec Succès` })
+                .then(function(messageUpdate) {
+                    res.status(201).json({ 'message' : `Message Modifié avec Succès`, messageUpdate })
                 })
                 .catch(function(err) {
-                    res.status(404).json({ 'erreur' : `Impossible de Mettre à Jour le Titre/Contenu du Message`, err })
-                })
+                    res.status(500).json({ 'erreur' : `Impossible de Mettre à Jour le Message`, err})
                 })
             } else {
-                console.log(messageFound.images.split('/images/')[1])
-                //fs.unlink(`images/${filename}`, () => {
-                res.status(200).json({ 'message' : `Mise à Jour Inutile, Titre et Contenu Identique` })
-                //})
+                return res.status(404).json({ 'message' : `Message Non Trouvé pour l'Utilisateur` })
             }
         })
         .catch(function(err) {
-            res.status(500).json({ 'erreur': `Recherche Messages Impossible`, err })
+            res.status(500).json({ 'erreur' : `Impossible de Trouver l'Utilisateur`, err })
         })
     })
     .catch(function(err) {
-        res.status(500).json({ 'erreur' : `Impossible de Vérifier l'Utilisateur dans la BDD`, err })
+        res.status(500).json({ 'erreur': `Impossible de Vérifier l'Utilisateur dans la BDD`, err });
     })
 }
 
