@@ -7,10 +7,6 @@ const TITLE_LIMIT = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT = 50;
 
-function deleteImg(path) {
-    
-}
-
 exports.createMessage = (req, res) => {
 
     let headerAuth = req.headers['authorization'];
@@ -86,10 +82,6 @@ exports.listMessage = (req, res) => {
         attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
         limit: (!isNaN(limit)) ? limit : null,
         offset: (!isNaN(offset)) ? offset : null,
-        /*include: [{
-            model: models.User,
-            attributes: [ 'username' ]
-        }]*/
     })
     .then(function(messages) {
         if (messages) {
@@ -227,17 +219,33 @@ exports.deleteMessage = (req, res) => {
             }
         })
         .then(function(messageFound) {
-            models.Message.destroy({
-                where: {
-                    id: messageFound.id
-                }
-            })
-            .then(function() {
-                return res.status(201).json({ 'message' : 'Message Supprimé avec Succès' })
-            })
-            .catch(function(err) {
-                return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
-            })
+            if(messageFound.images == null) {
+                models.Message.destroy({
+                    where: {
+                        id: messageFound.id
+                    }
+                })
+                .then(function() {
+                    return res.status(201).json({ 'message' : 'Message Supprimé avec Succès' })
+                })
+                .catch(function(err) {
+                    return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
+                })
+            } else {
+                const filename = messageFound.images.split('/images/')[1];
+                fs.unlinkSync(`images/${filename}`)
+                models.Message.destroy({
+                    where: {
+                        id: messageFound.id
+                    }
+                })
+                .then(function() {
+                    res.status(201).json({ 'message' : `Message avec Image supprimé avec Succès`})
+                })
+                .catch(function(err) {
+                    return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
+                })
+            }
         })
         .catch(function(err) {
             return res.status(404).json({ 'erreur' : `Impossible de Trouver le Message`, err })  
