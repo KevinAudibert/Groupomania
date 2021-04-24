@@ -87,11 +87,11 @@ exports.listMessage = (req, res) => {
         if (messages) {
             res.status(200).json(messages);
         } else {
-            res.status(404).json({ 'erreur': `Aucuns Messages Trouvés` });
+            res.status(100).json({ 'message': `Aucuns Messages Trouvés` });
         }
     })
     .catch(function(err) {
-        res.status(500).json({ 'erreur' : `Champs Invalides`, err });
+        res.status(500).json({ 'erreur' : `Impossible de Trouver les Messages`, err });
     })
 }
 
@@ -159,14 +159,14 @@ exports.updateMessage = (req, res) => {
                     res.status(201).json({ 'message' : `Message Modifié avec Succès`, messageUpdate })
                 })
                 .catch(function(err) {
-                    res.status(500).json({ 'erreur' : `Impossible de Mettre à Jour le Message`, err})
+                    res.status(400).json({ 'erreur' : `Impossible de Mettre à Jour le Message`, err})
                 })
             } else {
-                return res.status(404).json({ 'message' : `Message Non Trouvé pour l'Utilisateur` })
+                return res.status(404).json({ 'erreur' : `Message Non Trouvé pour l'Utilisateur` })
             }
         })
         .catch(function(err) {
-            res.status(500).json({ 'erreur' : `Impossible de Trouver l'Utilisateur`, err })
+            res.status(500).json({ 'erreur' : `Impossible de Trouver le Message`, err })
         })
     })
     .catch(function(err) {
@@ -192,7 +192,7 @@ exports.getOneMessageUserId = (req, res) => {
             if (messageFound !== null) {
                 res.status(201).json(messageFound)
             } else {
-                res.status(404).json({ 'message' : `Message introuvable`})
+                res.status(404).json({ 'erreur' : `Message introuvable`})
             }
         })
         .catch(function(err) {
@@ -248,7 +248,7 @@ exports.deleteMessage = (req, res) => {
             }
         })
         .catch(function(err) {
-            return res.status(404).json({ 'erreur' : `Impossible de Trouver le Message`, err })  
+            return res.status(500).json({ 'erreur' : `Impossible de Trouver le Message`, err })  
         })              
     })
     .catch(function(err) {

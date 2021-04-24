@@ -32,14 +32,14 @@ exports.likeMessage = (req,res) => {
                         res.status(201).json({ 'message' : `J'aime le Message`})
                     })
                     .catch(function(err) {
-                        res.status(500).json({ 'erreur' : `Impossible de Mettre à jour le Like`, err })
+                        res.status(400).json({ 'erreur' : `Impossible de Mettre à jour le Like`, err })
                     })
                 })
                 .catch(function(err) {
                     res.status(500).json({ 'erreur' : `Impossible d'Aimer le Message`, err })
                 })
             } else {
-                res.status(400).json({ 'message' : `Message déjà like`})
+                res.status(100).json({ 'message' : `Message déjà like`})
             }
         })
         .catch(function(err) {
