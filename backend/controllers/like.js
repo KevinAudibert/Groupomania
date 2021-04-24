@@ -3,7 +3,6 @@ const jwtUtils = require('../utils/jwt.utils');
 const { model } = require('../config/dbconnect');
 
 const like = 1;
-const dislike = -1;
 
 exports.likeMessage = (req,res) => {
     let headerAuth = req.headers['authorization'];

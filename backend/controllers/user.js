@@ -43,11 +43,11 @@ exports.signup = (req, res) => {
                     })
                 })
                 .catch(function(err) {
-                    res.status(500).json({ 'erreur' : `Impossible d'ajouter un nouvel utilisateur`, err })
+                    res.status(500).json({ 'erreur' : `Impossible de Créer un Utilisateur`, err })
                 })
             })
         } else {
-            return res.status(409).json({ 'erreur' : `L'utilisateur existe déjà dans la BDD` })
+            return res.status(100).json({ 'message' : `L'utilisateur existe déjà dans la BDD` })
         }
     })
     .catch(function(err) {
@@ -92,7 +92,7 @@ exports.getUserProfile = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(400).json({ 'erreur': 'Token incorrect' })
+        return res.status(403).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
@@ -101,7 +101,7 @@ exports.getUserProfile = (req, res) => {
     })
     .then(function(user) {
         if (user) {
-            res.status(201).json(user)
+            res.status(200).json(user)
         } else {
             res.status(404).json({ 'erreur': `L'utilisateur n'est pas trouvé dans la BDD` })
         }
@@ -133,7 +133,7 @@ exports.updateUserProfile = (req, res) => {
                 res.status(500).json({ 'erreur' : `Impossible de mettre à jour la Bio de l'utilisateur`, err })
             })
         } else {
-            res.status(200).json({ 'message' : `Mise à jour inutile, texte identique` })
+            res.status(100).json({ 'message' : `Mise à jour inutile, texte identique` })
         }
     })
     .catch(function(err) {
@@ -160,11 +160,11 @@ exports.deleteUserProfile = (req, res) => {
                     return res.status(201).json({ 'message' : 'Profil Supprimé avec Succès' })
                 })
                 .catch(function(err) {
-                    return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Profil`, err }) 
+                    return res.status(401).json({ 'erreur' : `Impossible de Supprimer le Profil`, err }) 
                 })
             })
             .catch(function(err) {
-                return res.status(404).json({ 'erreur' : `Impossible de Supprimer les messages`, err })  
+                return res.status(401).json({ 'erreur' : `Impossible de Supprimer les messages`, err })  
             })              
     })
     .catch(function(err) {

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.Message.hasMany(models.Like)
       models.Message.belongsTo(models.User, {
         foreignKey: {
           allowNull: false
