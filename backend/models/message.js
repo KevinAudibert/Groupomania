@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Message.hasMany(models.Like)
+      models.Message.hasMany(models.Like, { onDelete: 'cascade', hooks: true })
       models.Message.belongsTo(models.User, {
         foreignKey: {
           allowNull: false

@@ -87,7 +87,7 @@ exports.listMessage = (req, res) => {
         if (messages) {
             res.status(200).json(messages);
         } else {
-            res.status(100).json({ 'message': `Aucuns Messages Trouvés` });
+            res.status(404).json({ 'erreur': `Aucuns Messages Trouvés` });
         }
     })
     .catch(function(err) {

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const fs = require('fs');
 const validator = require('validator');
 const jwtUtils = require('../utils/jwt.utils');
 const models = require('../models');
@@ -6,6 +7,27 @@ const { model } = require('../config/dbconnect');
 
 const userNameMinLimit = 2
 const userNameMaxLimit = 16
+
+//Fonction supprimant toutes les Iimages de l'utilisateur
+function deleteImg(userId) {
+    models.Message.findAll({
+        attributes: ['images'],
+        where: {
+            userId: userId
+        }
+    })
+    .then(function(allMessage) {
+        for (let img of allMessage) {
+            let filename = img.images.split('/images/')[1]
+            fs.unlink(`images/${filename}`, () => {
+                console.log('OK')
+            })
+        }
+    })
+    .catch(function(err) {
+        res.status(500).json({ 'erreur' : `Impossible de Trouver l'Utilisateur`, err })
+    })
+}
 
 exports.signup = (req, res) => {
 
@@ -47,7 +69,7 @@ exports.signup = (req, res) => {
                 })
             })
         } else {
-            return res.status(100).json({ 'message' : `L'utilisateur existe déjà dans la BDD` })
+            return res.status(400).json({ 'erreur' : `L'utilisateur existe déjà dans la BDD` })
         }
     })
     .catch(function(err) {
@@ -133,7 +155,7 @@ exports.updateUserProfile = (req, res) => {
                 res.status(500).json({ 'erreur' : `Impossible de mettre à jour la Bio de l'utilisateur`, err })
             })
         } else {
-            res.status(100).json({ 'message' : `Mise à jour inutile, texte identique` })
+            res.status(400).json({ 'erreur' : `Mise à jour inutile, texte identique` })
         }
     })
     .catch(function(err) {
@@ -145,29 +167,20 @@ exports.deleteUserProfile = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
-    models.User.findOne({
+    models.User.findOne({ 
         where: { id: userId }
     })
     .then(function(userFound) {
-            models.Message.destroy({
-                where: { userId: userFound.id }
-            })
-            .then(function() {
-                models.User.destroy({
-                    where: { id: userFound.id }
-                })
-                .then(function() {
-                    return res.status(201).json({ 'message' : 'Profil Supprimé avec Succès' })
-                })
-                .catch(function(err) {
-                    return res.status(401).json({ 'erreur' : `Impossible de Supprimer le Profil`, err }) 
-                })
-            })
-            .catch(function(err) {
-                return res.status(401).json({ 'erreur' : `Impossible de Supprimer les messages`, err })  
-            })              
+        deleteImg(userId)
+        userFound.destroy()
+        .then(function() {
+            res.status(201).json({ 'message' : `Profil Supprimé` })
+        })
+        .catch(function(err) {
+            res.status(404).json({ 'erreur' : `Impossible de Supprimer le Profil`, err })
+        })
     })
     .catch(function(err) {
-        return res.status(500).json({ 'erreur' : `Impossible de vérifier l'utilisateur dans la BDD`, err })        
+        res.status(500).json({ 'erreur' : `Impossible de Trouver l'Utilisateur`, err })
     })
 }
