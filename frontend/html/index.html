@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Mon Application Vue.js</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Exercices OpenClassRooms pour le FrontEnd du Projet 7</h1>
+
+        <h2>{{ introduction }}</h2>
+
+        <h3>Exercices 1</h3>
+        <ul>
+            <li v-for='item in shoppingCart'>
+                <a :href="item.url">{{ item.label }}</a> : {{ item.cost }}€
+            </li>
+        </ul>
+        <p>Total: {{ totalPrice }}€</p>
+
+    <button @click="showModal = !showModal">Display Modal</button>
+    <div v-show="showModal" class="modal"> {{ totalPrice }}€</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                introduction: `Exercice VueJS`,
+                shoppingCart : [
+                    {
+                        label: 'Pommes',
+                        cost: 8,
+                        url: '/apples.html'
+                    },
+                    {
+                        label: 'Melons',
+                        cost: 3,
+                        url: '/melons.html'
+                    },
+                    {
+                        label: 'Bananes',
+                        cost: 4,
+                        url: '/bananas.html'
+                    }
+                ],
+                showModal: false   
+                },
+            computed: {
+                totalPrice() {
+                    let total = 0
+                    this.shoppingCart.forEach(item => {
+                        total += item.cost
+                    })
+                    return total
+                }
+            } 
+        })
+    </script>
+</body>
+</html>

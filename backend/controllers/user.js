@@ -12,15 +12,13 @@ const userNameMaxLimit = 16
 function deleteImg(userId) {
     models.Message.findAll({
         attributes: ['images'],
-        where: {
-            userId: userId
-        }
+        where: { userId: userId }
     })
-    .then(function(allMessage) {
-        for (let img of allMessage) {
-            let filename = img.images.split('/images/')[1]
+    .then(function(allMessages) {
+        for (let message of allMessages) {
+            let filename = message.images.split('/images/')[1]
             fs.unlink(`images/${filename}`, () => {
-                console.log('OK')
+                console.log('Les Images ont bien été Supprimées')
             })
         }
     })
