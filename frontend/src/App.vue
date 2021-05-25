@@ -3,7 +3,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'App',
     components: {
@@ -15,25 +14,22 @@
 
 * {
   font-family: 'Poppins', sans-serif;
-  margin:0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-#app {
-  max-width: 100%;
+  margin: 0;
 }
 body {
   background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  flex-direction: column;
   min-height: 100vh;
-  padding:32px;
 }
-img {
-  max-width: 100%;
-  border-radius: 8px;
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 .card {
   max-width: 100%;
@@ -41,6 +37,8 @@ img {
   background:white;
   border-radius: 16px;
   padding:32px;
+  box-sizing: border-box;
+  margin-bottom: 5%
 }
 .card-title {
   text-align:center;

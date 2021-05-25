@@ -1,4 +1,7 @@
 <template>
+    <div class="logo">
+        <img src="../assets/icon-left-font-monochrome-black.svg">
+    </div>
     <div class="card">
         <h1 class="card-title" v-if="mode == 'login'">Connexion</h1>
         <h1 class="card-title" v-else>Inscription</h1>
@@ -13,18 +16,29 @@
         <div class="form-row">
             <input v-model="password" class="form-row_input" type="password" placeholder="Mot de Passe"/>
         </div>
+        <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
+            Adresse mail et/ou mot de passe invalide
+        </div>
+        <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
+            Adresse mail déjà utilisée
+        </div>
         <div class="form-row">
-            <button class="button button-disabled" v-if="mode == 'login'">
-                Connexion
+            <button @click="login()" class="button" :class="{'button-disabled' : !validatedFields}" v-if="mode == 'login'">
+                <span v-if="status == 'loading'">Connexion en cours ...</span>
+                <span v-else>Connexion</span>
             </button>
             <button @click="createAccount()" class="button" :class="{'button-disabled' : !validatedFields}" v-else>
-                Créer mon compte
+                <span v-if="status == 'loading'">Création en cours ...</span>
+                <span v-else>Créer mon compte</span>
             </button>
         </div>
     </div>
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
+
 export default {
     name: 'Login',
     data: function() {
@@ -33,6 +47,12 @@ export default {
             email: '',
             username: '',
             password: '',
+        }
+    },
+    mounted: function() {
+        if(this.$store.state.user.userId != -1) {
+            this.$router.push('/Profile');
+            return
         }
     },
     computed: {
@@ -50,7 +70,8 @@ export default {
                     return false;
                 }
             }
-        }
+        },
+        ...mapState(['status'])
     },
     methods: {
         switchCreateAccount: function() {
@@ -59,8 +80,30 @@ export default {
         switchLogAccount: function() {
             this.mode = "login";
         },
+        login: function() {
+            const self = this;
+            this.$store.dispatch('login', {
+                email: this.email,
+                password: this.password
+            })
+            .then(function() {
+                self.$router.push('profile')
+            }), function(error) {
+                console.log(error)
+            }
+        },
         createAccount: function() {
-            console.log(this.email, this.username, this.password)
+            const self = this;
+            this.$store.dispatch('createAccount', {
+                email: this.email,
+                username: this.username,
+                password: this.password
+            })
+            .then(function() {
+                self.login();
+            }), function(error) {
+                console.log(error)
+            }
         }
     }
 }
@@ -90,4 +133,16 @@ export default {
 .form-row_input::placeholder {
     color:#aaaaaa;
 }
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5%;
+    margin-top: 5%
+}
+img {
+  max-width: 70%;
+  border-radius: 8px;
+}
+
 </style>
