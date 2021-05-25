@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Message.init({
+    username: DataTypes.STRING,
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     images: DataTypes.STRING,

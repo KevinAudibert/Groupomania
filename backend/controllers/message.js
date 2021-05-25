@@ -38,7 +38,8 @@ exports.createMessage = (req, res) => {
                 content: content,
                 images: null,
                 likes: 0,
-                UserId: userFound.id
+                UserId: userFound.id,
+                username: userFound.username
             })
             .then(function() {
                 return res.status(201).json({ 'message' : `Message Créé avec Succès` })
@@ -52,7 +53,8 @@ exports.createMessage = (req, res) => {
                 content: content,
                 images: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
                 likes: 0,
-                UserId: userFound.id
+                UserId: userFound.id,
+                username: userFound.username
             })
             .then(function() {
                 return res.status(201).json({ 'message' : `Message avec Image Créé avec Succès` })
@@ -78,7 +80,7 @@ exports.listMessage = (req, res) => {
     }
 
     models.Message.findAll({
-        order: [(order != null) ? order.split(':') : ['title', 'ASC']],
+        order: [(order != null) ? order.split(':') : ['createdAt', 'DESC']],
         attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
         limit: (!isNaN(limit)) ? limit : null,
         offset: (!isNaN(offset)) ? offset : null,

@@ -35,6 +35,8 @@ exports.signup = (req, res) => {
     let password = req.body.password;
     let bio = req.body.bio;
 
+
+    console.log(email)
     if (username.length >= userNameMaxLimit || username.length <= userNameMinLimit) {
         return res.status(400).json({ 'erreur': `Mauvais Nom d'Utilisateur (Caractères requis entre 3 et 17)` })
     } if (!validator.isEmail(email) || email == null) {
@@ -116,7 +118,7 @@ exports.getUserProfile = (req, res) => {
     }
 
     models.User.findOne({
-        attributes: [ 'id', 'email', 'username', 'bio' ],
+        attributes: [ 'id', 'email', 'username', 'bio', ],
         where: { id: userId }
     })
     .then(function(user) {
