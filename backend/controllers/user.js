@@ -35,8 +35,6 @@ exports.signup = (req, res) => {
     let password = req.body.password;
     let bio = req.body.bio;
 
-
-    console.log(email)
     if (username.length >= userNameMaxLimit || username.length <= userNameMinLimit) {
         return res.status(400).json({ 'erreur': `Mauvais Nom d'Utilisateur (Caractères requis entre 3 et 17)` })
     } if (!validator.isEmail(email) || email == null) {
@@ -139,6 +137,10 @@ exports.updateUserProfile = (req, res) => {
 
     let bio = req.body.bio;
 
+    if (userId < 0) {
+        return res.status(403).json({ 'erreur': 'Token incorrect' })
+    }
+
     models.User.findOne({
         attributes: [ 'id', 'bio' ],
         where: { id: userId }
@@ -166,6 +168,10 @@ exports.updateUserProfile = (req, res) => {
 exports.deleteUserProfile = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
+
+    if (userId < 0) {
+        return res.status(403).json({ 'erreur': 'Token incorrect' })
+    }
 
     models.User.findOne({ 
         where: { id: userId }

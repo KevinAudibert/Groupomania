@@ -3,10 +3,15 @@ const jwtUtils = require('../utils/jwt.utils');
 const { model } = require('../config/dbconnect');
 
 const like = 1;
+const unLike = -1;
 
 exports.likeMessage = (req,res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
+
+    if (userId < 0) {
+        return res.status(403).json({ 'erreur': 'Token incorrect' })
+    }
 
     models.Message.findOne({
         where: { id: req.params.id }
@@ -20,6 +25,8 @@ exports.likeMessage = (req,res) => {
         })
         .then(function(likeFound) {
             if(!likeFound){
+                console.log(userId)
+                console.log(req.params.id)
                 models.Like.create({
                     messageId: req.params.id,
                     userId: userId,
@@ -39,7 +46,21 @@ exports.likeMessage = (req,res) => {
                     res.status(500).json({ 'erreur' : `Impossible d'Aimer le Message`, err })
                 })
             } else {
-                res.status(400).json({ 'message' : `Message déjà like`})
+                likeFound.destroy()
+                .then(function() {
+                    messageFound.update({
+                        likes: messageFound.likes + unLike
+                    })
+                    .then(function() {
+                        res.status(201).json({ 'message' : `Je n'aime plus le Message`})
+                    })
+                    .catch(function(err) {
+                        res.status(400).json({ 'erreur' : `Impossible de Mettre à jour le Like`, err })
+                    })
+                })
+                .catch(function(err) {
+                    res.status(500).json({ 'erreur' : `Impossible de ne plus Aimer le Message`, err })
+                })
             }
         })
         .catch(function(err) {
