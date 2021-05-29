@@ -6,7 +6,8 @@
             <h3>{{ post.title }}</h3>
             <img class="img-post" :src=post.images />
             <p>{{ post.content }}</p>
-        <button>Like </button>
+            <p v-if="post.likes!=0"> Nombre de Like : {{ post.likes }}</p>
+            <button @click="createLike(post.id)">Like </button>
             <p> Créé par {{ post.username }} le {{ post.createdAt }}</p>
         </div>
     </div>
@@ -34,6 +35,17 @@ export default {
         .then(messages => { 
             this.posts = messages.data
         })
+    },
+    methods: {
+        createLike(postId) {
+            let userInfo = JSON.parse(localStorage.getItem("user"));
+            let token = userInfo.token
+
+            axios.post(`http://localhost:3000/api/messages/${postId}/like`, {}, {
+                headers: { Authorization: "Bearer " + token } 
+            })
+            .then(() => this.$router.go(0)) 
+        }
     },
     components: {
         Nav,
@@ -67,10 +79,6 @@ h1 {
 
 h3 {
     text-align: center;
-}
-
-.card {
-    width: 50%
 }
 
 </style>

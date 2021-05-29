@@ -12,7 +12,7 @@
             <input class="file" type="file" ref="file" @change="selectFile()"/>
         </div>
         <div class="form-row">
-            <button type="submit" class="button" @click.prevent="createNewMessage">
+            <button type="submit" class="button" @click="createNewMessage()">
                 Publier
             </button>
         </div>
@@ -48,7 +48,7 @@ export default {
                     data.append("content", this.content);
                 }
             axios.post("http://localhost:3000/api/messages/new", data, {
-                headers: { Authorization: token },
+                headers: { Authorization: "Bearer " + token },
             })
             .then(() => {
                 this.$router.push("/AllPost");
