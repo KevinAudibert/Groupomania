@@ -148,7 +148,7 @@ exports.updateUserProfile = (req, res) => {
     .then(function(userFound) {
         if (userFound.bio !== bio) {
             userFound.update({
-                bio: (bio ? bio : userFound.bio)
+                bio: bio
             })
             .then(function() {
                 return res.status(201).json({ 'message' : `Biographie modifié avec succès` })

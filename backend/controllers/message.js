@@ -74,10 +74,18 @@ exports.createMessage = (req, res) => {
 }
 
 exports.listMessage = (req, res) => {
+
+    let headerAuth = req.headers['authorization'];
+    let userId = jwtUtils.getUserId(headerAuth);
+
     let fields = req.query.fields;
     let limit = parseInt(req.query.limit);
     let offset = parseInt(req.query.offset);
     let order = req.query.order;
+
+    if (userId < 0) {
+        return res.status(403).json({ 'erreur': 'Token incorrect' })
+    }
 
     if (limit > ITEMS_LIMIT) {
         limit = ITEMS_LIMIT;
@@ -188,7 +196,7 @@ exports.updateMessage = (req, res) => {
     })
 }
 
-exports.getOneMessageUserId = (req, res) => {
+exports.getOneMessage = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
@@ -199,10 +207,9 @@ exports.getOneMessageUserId = (req, res) => {
     models.User.findOne({
         where: { id: userId }
     })
-    .then(function(userFound) {
+    .then(function() {
         models.Message.findOne({
             where: {
-                userId: userFound.id,
                 id: req.params.id
             }
         })

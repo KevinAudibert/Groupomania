@@ -25,8 +25,6 @@ exports.likeMessage = (req,res) => {
         })
         .then(function(likeFound) {
             if(!likeFound){
-                console.log(userId)
-                console.log(req.params.id)
                 models.Like.create({
                     messageId: req.params.id,
                     userId: userId,
@@ -69,5 +67,35 @@ exports.likeMessage = (req,res) => {
     })
     .catch(function(err) {
         res.status(404).json({ 'erreur' : `Message Introuvable`, err })
+    })
+}
+
+exports.getLikesMessage = (req, res) => {
+    let headerAuth = req.headers['authorization'];
+    let userId = jwtUtils.getUserId(headerAuth);
+
+    if (userId < 0) {
+        return res.status(403).json({ 'erreur': 'Token incorrect' })
+    }
+
+    models.Message.findOne({
+        where: { id: req.params.id }
+    })
+    .then(function(messageFound) {
+        models.Like.findOne({
+            where: {
+                messageId: messageFound.id,
+                userId: userId,
+            }
+        })
+        .then(function(likeFound) {
+            return res.status(201).json(likeFound)
+        })
+        .catch(function(err) {
+            res.status(500).json({ 'erreur' : `Aucun Like trouvé pour ce message`, err })
+        })
+    })
+    .catch(function(err) {
+        res.status(500).json({ 'erreur' : `Message Introuvable`, err})
     })
 }

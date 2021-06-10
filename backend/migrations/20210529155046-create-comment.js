@@ -9,18 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       messageId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Messages',
           key: 'id'
-        }
+        },
+        onDelete: "CASCADE",
       },
       userId: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
           key: 'id'
-        }
+        },
+        onDelete: "CASCADE",
       },
       username: {
         allowNull: false,

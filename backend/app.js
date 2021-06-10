@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const express = require('express');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+//const rateLimit = require('express-rate-limit');
 const userRoutes = require('./routes/user');
 const messageRoutes = require('./routes/message');
 const likeRoutes = require('./routes/like')
@@ -12,10 +12,10 @@ const path = require('path');
 
 const app = express();
 
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, 
-    max: 100 
-});
+//const limiter = rateLimit({
+//    windowMs: 15 * 60 * 1000, 
+//    max: 100 
+//});
 
 sequelize.authenticate()
     .then(() => console.log('Connection has been established successfully.'))
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(helmet());
-app.use(limiter);
+//app.use(limiter);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

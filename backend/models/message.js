@@ -13,12 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Message.hasMany(models.Like, { onDelete: 'cascade', hooks: true })
       models.Message.hasMany(models.Comment, { onDelete: 'cascade', hooks: true })
-      models.Message.belongsTo(models.User, {
-        foreignKey: {
-          allowNull: false
-        }
-      })
+      models.Message.belongsTo(models.User, { foreignKey: 'userId' })
     }
+
   };
   Message.init({
     username: DataTypes.STRING,
