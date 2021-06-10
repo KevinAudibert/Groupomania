@@ -1,8 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router"
 import Login from '../views/Login.vue'
 import Profile from '../views/Profile.vue'
-import AllPost from '../views/AllPost.vue'
+import Wall from '../views/Wall.vue'
 import CreateMessage from '../views/CreateMessage.vue'
+import ModifyProfile from '../views/ModifyProfile.vue'
+import OneMessage from '../views/OneMessage.vue'
 
 const routes = [
   {
@@ -16,15 +18,25 @@ const routes = [
     component: Profile
   },
   {
-    path: '/AllPost',
-    name: 'allpost',
-    component: AllPost
+    path: '/Wall',
+    name: 'wall',
+    component: Wall
   },
   {
     path: '/CreateMessage',
     name: 'createmessage',
     component: CreateMessage
-  }
+  },
+  {
+    path: '/modifyProfile',
+    name: 'modifyprofile',
+    component: ModifyProfile
+  },
+  {
+    path: '/onemessage/:id',
+    name: 'OneMessage',
+    component: OneMessage
+  },
 ]
 
 const router = createRouter({

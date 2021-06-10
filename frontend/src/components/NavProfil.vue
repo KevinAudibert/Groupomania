@@ -4,7 +4,7 @@
     <div class="navigation-link">
       <ul>
         <li>
-          <router-link to='/AllPost'>Home</router-link>
+          <router-link to='/wall'>Home</router-link>
         </li>
         <li>
           <router-link to='/createmessage'>Créer Message</router-link>
