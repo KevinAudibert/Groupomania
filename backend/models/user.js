@@ -21,6 +21,7 @@ User.init({
   username: DataTypes.STRING,
   password: DataTypes.STRING,
   bio: DataTypes.STRING,
+  avatar: DataTypes.STRING,
   isAdmin: DataTypes.BOOLEAN
 }, {
   sequelize,

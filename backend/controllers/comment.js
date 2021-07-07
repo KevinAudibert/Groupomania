@@ -9,13 +9,13 @@ exports.createComment = (req, res) => {
     let content = req.body.content;
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
-    if (content.length == '') {
+    if (content == '') {
         return res.status(400).json({ 'erreur': `Commentaire Manquant` });
     }
-    
+    console.log(content)
     models.User.findOne({
         where: { id: userId }
     })
@@ -51,7 +51,7 @@ exports.listCommentUserId = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
@@ -84,13 +84,36 @@ exports.deleteComment = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
         where: { id: userId }
     })
     .then(function(userFound) {
+        if(userFound.isAdmin == 1) {
+            models.Comment.findOne({
+                where: {
+                    id: req.params.id
+                }
+            })
+            .then(function(commentFound) {
+                    models.Comment.destroy({
+                        where: {
+                            id: commentFound.id
+                        }
+                    })
+                    .then(function() {
+                        return res.status(201).json({ 'message' : 'Commentaire Supprimé avec Succès' })
+                    })
+                    .catch(function(err) {
+                        return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Commentaire`, err }) 
+                    })
+                })
+            .catch(function(err) {
+                return res.status(500).json({ 'erreur' : `Impossible de Trouver le Commentaire`, err })  
+            })  
+        } else {
         models.Comment.findOne({
             where: {
                 userId: userFound.id,
@@ -112,7 +135,8 @@ exports.deleteComment = (req, res) => {
             })
         .catch(function(err) {
             return res.status(500).json({ 'erreur' : `Impossible de Trouver le Commentaire`, err })  
-        })              
+        })
+        }             
     })
     .catch(function(err) {
         return res.status(500).json({ 'erreur' : `Impossible de Vérifier l'Utilisateur dans la BDD`, err })        
@@ -124,8 +148,13 @@ exports.allCommentMessage = (req, res) => {
     let headerAuth = req.headers['authorization'];
     let userId = jwtUtils.getUserId(headerAuth);
 
+    let fields = req.query.fields;
+    let limit = parseInt(req.query.limit);
+    let offset = parseInt(req.query.offset);
+    let order = req.query.order;
+
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
    
     models.User.findOne({
@@ -137,6 +166,10 @@ exports.allCommentMessage = (req, res) => {
         })
         .then(function(messageFound) {
             models.Comment.findAll({
+                order: [(order != null) ? order.split(':') : ['createdAt', 'DESC']],
+                attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+                limit: (!isNaN(limit)) ? limit : null,
+                offset: (!isNaN(offset)) ? offset : null,
                 where: { messageId: messageFound.id}
             })
             .then(function(commentFound) {

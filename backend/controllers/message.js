@@ -16,7 +16,7 @@ exports.createMessage = (req, res) => {
     let content = req.body.content;
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     if (title == '' || content == '') {
@@ -84,7 +84,7 @@ exports.listMessage = (req, res) => {
     let order = req.query.order;
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     if (limit > ITEMS_LIMIT) {
@@ -114,7 +114,7 @@ exports.listMessageUserId = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
@@ -151,7 +151,7 @@ exports.updateMessage = (req, res) => {
     let content = req.body.content;
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     if (title == '' || content == '') {
@@ -201,7 +201,7 @@ exports.getOneMessage = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
@@ -234,51 +234,91 @@ exports.deleteMessage = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.User.findOne({
         where: { id: userId }
     })
     .then(function(userFound) {
-        models.Message.findOne({
-            where: {
-                userId: userFound.id,
-                id: req.params.id
-            }
-        })
-        .then(function(messageFound) {
-            if(messageFound.images == null) {
-                models.Message.destroy({
-                    where: {
-                        id: messageFound.id
-                    }
-                })
-                .then(function() {
-                    return res.status(201).json({ 'message' : 'Message Supprimé avec Succès' })
-                })
-                .catch(function(err) {
-                    return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
-                })
-            } else {
-                const filename = messageFound.images.split('/images/')[1];
-                fs.unlinkSync(`images/${filename}`)
-                models.Message.destroy({
-                    where: {
-                        id: messageFound.id
-                    }
-                })
-                .then(function() {
-                    res.status(201).json({ 'message' : `Message avec Image supprimé avec Succès`})
-                })
-                .catch(function(err) {
-                    return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
-                })
-            }
-        })
-        .catch(function(err) {
-            return res.status(500).json({ 'erreur' : `Impossible de Trouver le Message`, err })  
-        })              
+        if(userFound.isAdmin == 1) {
+            models.Message.findOne({
+                where: {
+                    id: req.params.id
+                }
+            })
+            .then(function(messageFound) {
+                if(messageFound.images == null) {
+                    models.Message.destroy({
+                        where: {
+                            id: messageFound.id
+                        }
+                    })
+                    .then(function() {
+                        return res.status(201).json({ 'message' : 'Message Supprimé avec Succès' })
+                    })
+                    .catch(function(err) {
+                        return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
+                    })
+                } else {
+                    const filename = messageFound.images.split('/images/')[1];
+                    fs.unlinkSync(`images/${filename}`)
+                    models.Message.destroy({
+                        where: {
+                            id: messageFound.id
+                        }
+                    })
+                    .then(function() {
+                        res.status(201).json({ 'message' : `Message avec Image supprimé avec Succès`})
+                    })
+                    .catch(function(err) {
+                        return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
+                    })
+                }
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'erreur' : `Impossible de Trouver le Message`, err })  
+            })
+        } else {
+            models.Message.findOne({
+                where: {
+                    userId: userFound.id,
+                    id: req.params.id
+                }
+            })
+            .then(function(messageFound) {
+                if(messageFound.images == null) {
+                    models.Message.destroy({
+                        where: {
+                            id: messageFound.id
+                        }
+                    })
+                    .then(function() {
+                        return res.status(201).json({ 'message' : 'Message Supprimé avec Succès' })
+                    })
+                    .catch(function(err) {
+                        return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
+                    })
+                } else {
+                    const filename = messageFound.images.split('/images/')[1];
+                    fs.unlinkSync(`images/${filename}`)
+                    models.Message.destroy({
+                        where: {
+                            id: messageFound.id
+                        }
+                    })
+                    .then(function() {
+                        res.status(201).json({ 'message' : `Message avec Image supprimé avec Succès`})
+                    })
+                    .catch(function(err) {
+                        return res.status(404).json({ 'erreur' : `Impossible de Supprimer le Message`, err }) 
+                    })
+                }
+            })
+            .catch(function(err) {
+                return res.status(500).json({ 'erreur' : `Impossible de Trouver le Message`, err })  
+            })
+        }            
     })
     .catch(function(err) {
         return res.status(500).json({ 'erreur' : `Impossible de Vérifier l'Utilisateur dans la BDD`, err })        

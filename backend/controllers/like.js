@@ -10,7 +10,7 @@ exports.likeMessage = (req,res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.Message.findOne({
@@ -75,7 +75,7 @@ exports.getLikesMessage = (req, res) => {
     let userId = jwtUtils.getUserId(headerAuth);
 
     if (userId < 0) {
-        return res.status(403).json({ 'erreur': 'Token incorrect' })
+        return res.status(401).json({ 'erreur': 'Token incorrect' })
     }
 
     models.Message.findOne({

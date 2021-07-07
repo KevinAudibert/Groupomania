@@ -36,6 +36,7 @@ app.use(helmet());
 //app.use(limiter);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/avatars', express.static(path.join(__dirname, 'avatars')));
 
 app.use('/api/users/', userRoutes);
 app.use('/api/messages/', messageRoutes);
