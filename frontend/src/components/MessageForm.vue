@@ -6,9 +6,7 @@
             <img class="img-post" :src=post.images />
             <p>{{ post.content }}</p>
             <p> Publié par {{ post.username }} le {{ dateOfPost(post.createdAt) }}</p>
-            <p> Likes : {{ post.likes }}</p>
-        </div>
-        <div class="btn-delete-like" v-if="post.UserId == userId">
+        <div class="btn-delete-like" v-if="post.UserId == userId || user.isAdmin == true">
             <button @click="deletePost()" type="submit"> Supprimer </button>
             <Like />
         </div>
@@ -16,12 +14,18 @@
             <Like />
         </div>
     </div>
+            <Commentform />
+            <Comments />
+    </div>
 </template>
 
 <script>
 
 import axios from 'axios';
 import Like from '@/components/Like.vue'
+import Commentform from '@/components/CreateComment.vue'
+import Comments from '@/components/Comments.vue'
+import { mapState } from 'vuex'
 
 export default {
     name: 'GetOneMessage',
@@ -31,8 +35,15 @@ export default {
             userId: JSON.parse(localStorage.getItem("user")).userId,
         }
     },
+    computed: {
+        ...mapState({
+            user: 'userInfos',
+        })
+    },
     components: {
         Like,
+        Commentform,
+        Comments,
     },
     mounted() {
         this.getOnePost();
@@ -92,7 +103,7 @@ export default {
 <style scoped>
 
 .card {
-    width: 80%;
+    width: 60%;
 }
 
 a {
@@ -105,15 +116,16 @@ a {
 }
 
 h1 {
-  height: 100px;
+  height: 80px;
   width: 100%;
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .img-post {
-    max-width: 40%
+    max-width: 30%
 }
 
 .posts {
@@ -122,7 +134,9 @@ h1 {
     align-items: center;
     border: solid;
     border-radius: 16px;
-    margin: 5%;
+    padding: 2%;
+    height: 320px;
+    justify-content: space-around;
 }
 
 h3 {
@@ -131,7 +145,8 @@ h3 {
 
 .btn-delete-like {
     display: flex;
-    justify-content: space-around
+    justify-content: space-around;
+    width: 100%
 }
 
 button {

@@ -87,7 +87,7 @@ export default {
                 password: this.password
             })
             .then(function() {
-                self.$router.push('profile')
+                self.$router.push('wall')
             }), function(error) {
                 console.log(error)
             }

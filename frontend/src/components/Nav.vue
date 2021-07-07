@@ -4,13 +4,13 @@
     <div class="navigation-link">
       <ul>
         <li>
-          <router-link to='/profile'>Profil</router-link>
+            <router-link to='/profile' class="fas fa-user-circle"></router-link>
         </li>
         <li>
-          <router-link to='/createmessage'>Créer Message</router-link>
+            <router-link to='/createmessage' class="far fa-edit"></router-link>
         </li>
         <li>
-          <a @click= "logout()">Déconnexion</a>
+          <a @click= "logout()" class="fas fa-sign-in-alt"></a>
         </li>
       </ul>
     </div>
@@ -40,7 +40,7 @@ export default {
 <style scoped>
 
 .mini-logo {
-  width: 60px;
+  width: 70px;
 }
 
 .navbar {
@@ -49,17 +49,19 @@ export default {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  position: fixed;
 }
 
 ul {
   display: flex;
   list-style: none;
   padding: 0;
-  margin: 0 20px 0 0;
+  width: 250px;
+  justify-content: space-between
 }
 
 a {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   padding: 2px 10px;
   cursor: pointer;
   text-decoration: none;

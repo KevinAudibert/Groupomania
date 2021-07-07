@@ -1,18 +1,18 @@
 <template>
     <Nav />
-    <GetOneMessage /> 
+    <MessageForm /> 
 </template>
 
 <script>
 
 import Nav from '@/components/NavMessage.vue'
-import GetOneMessage from '@/components/GetOneMessage.vue'
+import MessageForm from '@/components/MessageForm.vue'
 
 export default {
-  name: "OneMessage",
+  name: "Message",
   components: {
     Nav,
-    GetOneMessage,
+    MessageForm,
   },
 }
 

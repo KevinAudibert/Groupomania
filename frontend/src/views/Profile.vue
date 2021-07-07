@@ -1,18 +1,18 @@
 <template>
     <Nav />
-    <Profil />
+    <InfoProfil />
 </template>
 
 <script>
 
 import Nav from '../components/NavProfil.vue'
-import Profil from '@/components/Profil.vue'
+import InfoProfil from '@/components/InfoProfil.vue'
 
 export default {
     name: 'Profile',
     components: {
         Nav,
-        Profil,
+        InfoProfil,
     },
 }
 

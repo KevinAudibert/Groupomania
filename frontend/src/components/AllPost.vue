@@ -4,22 +4,22 @@
         <div class="posts" v-for="post in posts" :key="post.id" >
             <h3>{{ post.title }}</h3>
             <img class="img-post" :src=post.images />
+            <div class="user-info">
             <p>{{ post.content }}</p>
             <p> Publié par {{ post.username }} le {{ dateOfPost(post.createdAt) }}</p>
-            <p> Likes : {{ post.likes }}</p>
+            <div class="like-info">
+                <i class="fas fa-heart"></i> 
+                <p>{{ post.likes }}</p>
+            </div>
+        </div>
                 <div class="opt-btn">
-                    <router-link :to=" { name: 'OneMessage', params: { id: post.id }} ">
+                    <router-link :to=" { name: 'Message', params: { id: post.id }} ">
                         <button class="btn-onemessage">Voir le Message</button>
-                    </router-link>  
-
-                    <button @click="loadComments(post.id)"> Voir les commentaires</button>
-                </div>
-                <div class="comments" v-for="comment in comments" :key="comment.id">
-                    <p>{{ comment.content }}</p>
+                    </router-link>
                 </div>
         </div>
     </div>
-    <div class="card" v-else>
+    <div v-else class="card">
         <div class="no-message">
             <p> Aucun Message </p>
         </div>
@@ -59,24 +59,6 @@ export default {
 
             return event.toLocaleDateString('fr-Fr', opt);
         },
-        loadComments(postId) {
-            let userInfo = JSON.parse(localStorage.getItem("user"));
-            let token = userInfo.token
-
-            axios.get(`http://localhost:3000/api/messages/${postId}/allcomments`, {
-                headers: { Authorization: "Bearer " + token } 
-            })
-            .then(result => {
-                this.comments = result.data
-            })
-            .catch(error => {
-                if(error.response.status == 404) {
-                    this.comments = [{content :'Aucun Commentaire pour ce message'}]
-                } else {
-                    console.log('Une erreur API est survenue')
-                }
-            })
-        },
     }
 }
 
@@ -108,8 +90,9 @@ a {
 }
 
 h1 {
-  height: 100px;
+  height: 80px;
   width: 100%;
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,26 +112,32 @@ h1 {
     padding: 20px;
 }
 
-h3 {
-    text-align: center;
-}
-
-.btn-like {
+.user-info {
+    min-height: 100px;
     display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
 }
 
-.btn-like p {
-    margin-left: 10px;
+.like-info {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
-.btn-like i {
+.like-info p {
+    padding-left: 5px;
+}
+
+h3 {
+    text-align: center;
+    padding-bottom: 2%;
+}
+
+i {
     font-size: 2rem;
-    transition: .4s;
-}
-
-.btn-like:hover i {
-    color: #f50057;
 }
 
 .fas {

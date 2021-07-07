@@ -4,7 +4,11 @@ import Profile from '../views/Profile.vue'
 import Wall from '../views/Wall.vue'
 import CreateMessage from '../views/CreateMessage.vue'
 import ModifyProfile from '../views/ModifyProfile.vue'
-import OneMessage from '../views/OneMessage.vue'
+import Message from '../views/Message.vue'
+import ListUser from '../views/Users.vue'
+import ModifyPassword from '../views/ModifyPassword.vue'
+
+import store from '@/store/index.js'
 
 const routes = [
   {
@@ -33,15 +37,30 @@ const routes = [
     component: ModifyProfile
   },
   {
+    path: '/modifyPassword',
+    name: 'modifypassword',
+    component: ModifyPassword
+  },
+  {
     path: '/onemessage/:id',
-    name: 'OneMessage',
-    component: OneMessage
+    name: 'Message',
+    component: Message
+  },
+  {
+    path: '/listusers',
+    name: 'listusers',
+    component: ListUser
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'login' && store.state.user.userId === -1) next({ name: 'login' })
+  else next()
 })
 
 export default router

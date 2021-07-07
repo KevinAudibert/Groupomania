@@ -2,21 +2,26 @@
     <h1 class="card-title">Mes Informations</h1>
         <div class="card">
             <div class="image">
-                <img src="../assets/avatar_null.png">
+                <img v-if="user.avatar == null" src="../assets/avatar_null.png" />
+                <img v-else :src=user.avatar />
                 <input class="file" type="file" ref="file" @change="selectFile()"/>
             </div>
             <div class="infos">
                 <h3>Informations Personnelles</h3>
                 <p>Prénom : {{ user.username }}</p>
                 <p>Adresse E-mail : {{ user.email }}</p>
+                <p v-if="user.isAdmin == 1">Vous êtes connecté en tant qu'Administrateur</p>
             </div>
             <div class="bio">
                 <h3>Biographie</h3>
-                <textarea id="biographie" v-model="message" placeholder="Ajoutez plusieurs lignes à votre Biographie"></textarea>
+                <textarea id="biographie" placeholder="Ajoutez quelques lignes à votre Biographie"></textarea>
             </div>
             <div class="form-row">
                 <button @click="modifyProfil()" type="submit" class="button">
                     Valider les Modifications
+                </button>
+                <button @click="()=>$router.push('modifypassword')" class="button">
+                    Modifier Mot de Passe
                 </button>
                 <button @click="deleteProfile()" type="submit" class="button">
                     Supprimer le Profil
@@ -32,6 +37,12 @@ import axios from 'axios'
 
 export default {
     name: 'ModifyProfil',
+    data : function() {
+        return {
+            bio: '',
+            file: null,
+        }
+    },
     computed: {
         ...mapState({
             user: 'userInfos',
@@ -57,9 +68,24 @@ export default {
             let userInfo = JSON.parse(localStorage.getItem("user"));
             let token = userInfo.token
             let content = document.getElementById('biographie');
-            let bio = content.value
+            this.bio = content.value
+            
+            const data = new FormData()
+                if(this.file) {
+                    if(this.bio) {
+                        data.append("avatar", this.file, this.file.name);
+                        data.append("bio", this.bio);
+                        console.log('avatar et bio update')
+                    } else {
+                        data.append("avatar", this.file, this.file.name);
+                        console.log('avatar update')
+                    }
+                } else if(this.bio || this.bio == ""){
+                    data.append("bio", this.bio);
+                    console.log('bio update')
+                }
 
-            axios.put(`http://localhost:3000/api/users/me/update`, { bio }, {
+            axios.put(`http://localhost:3000/api/users/me/update`, data, {
                 headers: { Authorization: "Bearer " + token },
             })
             .then(() => {
@@ -74,16 +100,18 @@ export default {
 <style scoped>
 
 h1 {
-  height: 100px;
+  height: 80px;
   width: 100%;
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 img {
-    width: 30%;
-    border-radius: 100%;
+    width: 50%;
+    border-radius: 25% 10%;
+    border: 2px solid black;
 }
 
 .card {
@@ -98,11 +126,11 @@ img {
 
 textarea {
     width: 100%;
-    height: 160px;
+    height: 100px;
 }
 
 .infos {
-    height: 150px;
+    min-height: 150px;
     max-width: 100%;
     background: lightsteelblue;
     border-radius: 16px;
@@ -110,23 +138,21 @@ textarea {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-bottom: 15px;
-    padding-top: 15px;
+}
+.infos h3 {
+	text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
 }
 
 .image {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding-bottom: 40px
+
+    padding-bottom: 20px
 }
 
 .bio {
-    height: 230px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding-top: 15px
 }
 
 </style>

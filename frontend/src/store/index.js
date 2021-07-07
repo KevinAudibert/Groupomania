@@ -30,7 +30,9 @@ const store = createStore({
         userInfos: {
             username: '',
             email: '',
-            bio: ''
+            bio: '',
+            avatar: '',
+            isAdmin: '',
         }
     },
     mutations: {

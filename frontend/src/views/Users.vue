@@ -1,18 +1,18 @@
 <template>
     <Nav />
-    <ModifyProfil />
+    <ListProfils />
 </template>
 
 <script>
 
 import Nav from '@/components/NavMessage.vue'
-import ModifyProfil from '@/components/ModifyProfil.vue'
+import ListProfils from '@/components/AllUser.vue'
 
 export default {
-    name: 'ModifyProfile',
+    name: 'Users',
     components: {
         Nav,
-        ModifyProfil,
+        ListProfils,
     },
 }
 

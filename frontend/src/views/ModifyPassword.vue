@@ -1,18 +1,18 @@
 <template>
     <Nav />
-    <ModifyProfil />
+    <Password />
 </template>
 
 <script>
 
 import Nav from '@/components/NavMessage.vue'
-import ModifyProfil from '@/components/ModifyProfil.vue'
+import Password from '@/components/FormPassword.vue'
 
 export default {
-    name: 'ModifyProfile',
+    name: 'ModifyPassword',
     components: {
         Nav,
-        ModifyProfil,
+        Password,
     },
 }
 

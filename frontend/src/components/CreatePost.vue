@@ -102,8 +102,9 @@ export default {
 }
 
 h1 {
-  height: 100px;
+  height: 80px;
   width: 100%;
+  margin-top: 70px;
   display: flex;
   justify-content: center;
   align-items: center;
