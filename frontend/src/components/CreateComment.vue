@@ -58,6 +58,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #FD2D01;
 }
 
 .card-comment {

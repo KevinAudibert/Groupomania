@@ -83,6 +83,7 @@ export default {
     margin-top: 25px;
     margin-bottom: 25px;
     padding: 2%;
+    background-color: white;
 }
 
 a {

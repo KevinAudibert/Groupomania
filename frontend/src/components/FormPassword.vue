@@ -18,6 +18,9 @@
                 Modifier le Mot de Passe
             </button>
         </div>
+        <div v-if="message">
+            {{ message }}
+        </div>
 </div>
 </template>
 
@@ -32,6 +35,7 @@ export default {
             password: '',
             newpassword: '',
             confirmpassword: '',
+            message: '',
         }
     },
     methods: {
@@ -44,7 +48,7 @@ export default {
             this.password = password.value
             this.newpassword = newpassword.value
             this.confirmpassword = confirmpassword.value
-
+            
             if(this.newpassword == this.confirmpassword) {
                 axios.put(`http://localhost:3000/api/users/me/updatepassword`, { 
                     "password": this.password,
@@ -52,9 +56,11 @@ export default {
                 }, { headers: { Authorization: "Bearer " + token },
                 })
                 .then(() => {
-                    this.$router.push('/profile');
+                    this.message = 'Mot de passe modifié avec succès'
+                    //this.$router.push('/profile');
                 })
             } else {
+                this.message = 'La confirmation du Mot de Passe à échouée'
                 console.log('Une erreur API est survenue')
             } 
         }
@@ -66,12 +72,23 @@ export default {
 <style scoped>
 
 h1 {
-  height: 80px;
-  width: 100%;
-  margin-top: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 80px;
+    width: 100%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FD2D01;
+}
+
+.card {
+  max-width: 100%;
+  width: 540px;
+  background:white;
+  border-radius: 16px;
+  padding:32px;
+  box-sizing: border-box;
+  margin-bottom: 5%
 }
 
 .form-row {

@@ -12,43 +12,27 @@
 
 <style>
 
+html {
+  background-image: url("./assets/Sans titre.png");
+  height: 100%
+}
+
 * {
   font-family: 'Poppins', sans-serif;
   padding: 0;
   margin: 0;
 }
+
 body {
-  background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  min-height: 100vh;
+  height: 100%
 }
+
 #app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.card {
-  max-width: 100%;
-  width: 540px;
-  background:white;
-  border-radius: 16px;
-  padding:32px;
-  box-sizing: border-box;
-  margin-bottom: 5%
-}
-.card-title {
-  text-align:center;
-  font-weight: 800;
-}
-.card-subtitle {
-  text-align: center;
-  color:#666;
-  font-weight: 500;
-}
+
 .button {
   background: #2196F3;
   color:white;

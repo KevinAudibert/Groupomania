@@ -4,8 +4,10 @@
         <div class="posts">
             <h3>{{ post.title }}</h3>
             <img class="img-post" :src=post.images />
+            <div class="user-info">
             <p>{{ post.content }}</p>
             <p> Publié par {{ post.username }} le {{ dateOfPost(post.createdAt) }}</p>
+            </div>
         <div class="btn-delete-like" v-if="post.UserId == userId || user.isAdmin == true">
             <button @click="deletePost()" type="submit"> Supprimer </button>
             <Like />
@@ -102,45 +104,44 @@ export default {
 
 <style scoped>
 
-.card {
-    width: 60%;
-}
-
-a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-    text-decoration: none;
-    color: black;
+body {
+    height: 100%
 }
 
 h1 {
-  height: 80px;
-  width: 100%;
-  margin-top: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 80px;
+    width: 100%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FD2D01;
 }
 
-.img-post {
-    max-width: 30%
+.card {
+    width: 60%;
 }
 
 .posts {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: solid;
+    border: solid #FFD7D7;
     border-radius: 16px;
-    padding: 2%;
-    height: 320px;
-    justify-content: space-around;
+    padding: 20px;
+    background-color: white;
 }
 
-h3 {
-    text-align: center;
+.img-post {
+    max-width: 60%
+}
+
+.user-info {
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .btn-delete-like {
@@ -163,6 +164,11 @@ button {
 button:hover {
   cursor:pointer;
   background: #1976D2;
+}
+
+h3 {
+    text-align: center;
+    padding-bottom: 2%;
 }
 
 </style>

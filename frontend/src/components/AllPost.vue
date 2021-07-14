@@ -66,27 +66,8 @@ export default {
 
 <style scoped>
 
-.card {
-    width: 80%;
-}
-
-.no-message {
-    text-align: center;
-}
-
-.opt-btn {
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-}
-
-a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-    text-decoration: none;
-    color: black;
+body {
+    height: 100%
 }
 
 h1 {
@@ -96,20 +77,22 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.img-post {
-    max-width: 40%
+  color: #FD2D01;
 }
 
 .posts {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: solid;
+    border: solid #FFD7D7;
     border-radius: 16px;
-    margin: 5%;
+    margin: 0% 5% 5% 5%;
     padding: 20px;
+    background-color: white;
+}
+
+.img-post {
+    max-width: 40%
 }
 
 .user-info {
@@ -118,6 +101,12 @@ h1 {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+}
+
+.opt-btn {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
 .like-info {
@@ -159,6 +148,16 @@ button {
 button:hover {
   cursor:pointer;
   background: #1976D2;
+}
+
+
+a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    text-decoration: none;
+    color: black;
 }
 
 </style>

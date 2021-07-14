@@ -100,12 +100,13 @@ export default {
 <style scoped>
 
 h1 {
-  height: 80px;
-  width: 100%;
-  margin-top: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 80px;
+    width: 100%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FD2D01;
 }
 
 img {
@@ -113,9 +114,20 @@ img {
     border-radius: 25% 10%;
     border: 2px solid black;
 }
-
 .card {
-    text-align: center;
+    max-width: 100%;
+    width: 540px;
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-sizing: border-box;
+    margin-bottom: 5%;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 550px;
 }
 
 .form-row {
@@ -131,20 +143,22 @@ textarea {
 
 .infos {
     min-height: 150px;
-    max-width: 100%;
+    min-width: 100%;
     background: lightsteelblue;
     border-radius: 16px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    text-align: center;
 }
+
 .infos h3 {
 	text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
 }
 
 .image {
-
+    text-align: center;
     padding-bottom: 20px
 }
 
@@ -153,6 +167,7 @@ textarea {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-items: center;
 }
 
 </style>

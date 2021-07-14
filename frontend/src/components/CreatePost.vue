@@ -102,16 +102,22 @@ export default {
 }
 
 h1 {
-  height: 80px;
-  width: 100%;
-  margin-top: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 80px;
+    width: 100%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FD2D01;
 }
-
 .card {
-    width: 50%
+  max-width: 100%;
+  width: 540px;
+  background:white;
+  border-radius: 16px;
+  padding:32px;
+  box-sizing: border-box;
+  margin-bottom: 5%
 }
 
 button {

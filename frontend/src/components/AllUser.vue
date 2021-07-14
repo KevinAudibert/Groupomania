@@ -67,22 +67,24 @@ export default {
 <style scoped>
 
 h1 {
-  height: 80px;
-  width: 100%;
-  margin-top: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 80px;
+    width: 100%;
+    margin-top: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FD2D01;
 }
 
 .users {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: solid;
+    border: solid #FFD7D7;
     border-radius: 16px;
-    margin: 5%;
+    margin: 0% 5% 5% 5%;
     padding: 20px;
+    background-color: white;
 }
 
 img {
