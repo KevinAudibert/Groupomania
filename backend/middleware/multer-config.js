@@ -4,12 +4,7 @@ const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png',
-};
-
-const MIME_TYPES_AVATAR = {
-    'avatar/jpg': 'jpg',
-    'avatar/jpeg': 'jpg',
-    'avatar/png': 'png',
+    'image/gif': 'gif',
 };
 
 const storage = multer.diskStorage({
@@ -23,16 +18,4 @@ const storage = multer.diskStorage({
     }
 });
 
-const avatarStorage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, 'avatars');
-    },
-    filename: (req, file, callback) => {
-        const nameAvatar = file.originalname.split(' ').join('_');
-        const extensionAvatar = MIME_TYPES_AVATAR[file.mimetype];
-        callback(null, nameAvatar + Date.now() + '.' + extensionAvatar)
-    }
-});
-
-module.exports = multer({ storage: avatarStorage }).single('avatar');
 module.exports = multer({ storage: storage }).single('images');
