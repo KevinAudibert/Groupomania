@@ -35,7 +35,6 @@ export default {
     data: function() {
         return {
             posts: [],
-            comments: [],
         }
     },
     mounted() {
