@@ -1,4 +1,4 @@
-<P align="center"><img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png"  width="250px"/>
+<P align="center"><img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png"  width="400px"/>
 </p>
 
 <h1 align="center">Groupomania - Projet 7</h1>
@@ -31,10 +31,7 @@
 
 <p align="center"><img src="./images_readme/Screen.png" width="900px"></p>
 
-<p align="center">So Pekocko est une entreprise familiale de 10 salariés. Son activité principale est la création
-de sauces piquantes dont la composition est tenue secrète. Forte de son succès, l’entreprise
-souhaite se développer et créer une application web, dans laquelle les utilisateurs pourront
-ajouter leurs sauces préférées et liker ou disliker les sauces proposées par les autres.
+<p align="center">Groupomania est un groupe spécialisé dans la grande distribution. Il a pour projet de construire un réseau social interne pour les employés afin de facilité les interactions entre eux et ainsi améliorer l'ambiance au sein de l'Entreprise.
 </p>
 
 <h3 id="outils">&#x1F6E0 Outils utilisés</h3>
@@ -46,6 +43,8 @@ ajouter leurs sauces préférées et liker ou disliker les sauces proposées par
 * [Node.JS](https://nodejs.org/en/blog/release/v14.15.1/) (version 14.15.1)
 
 * [MySQL](https://www.mysql.com/fr/) (Base de donnée)
+
+* [Sequelize](https://sequelize.org/) (version 6.5.0)
 
 <h3 id="doc">&#x1F4D4 Documentation</h3>
 
@@ -60,25 +59,25 @@ ajouter leurs sauces préférées et liker ou disliker les sauces proposées par
 <p>Afin de pouvoir utiliser l'application, nous devons cloner le projet disponible sur GitHub vers le dossier de votre choix.</p>
 
    ```sh
-   git clone https://github.com/KevinAudibert/So_Pekocko.git
+   git clone https://github.com/KevinAudibert/Groupomania.git
    ```
 
 &#x1F6A8; **Attention** &#x1F6A8;
 ---
 
-Il sera necessaire de créer un fichier `.env` dans le dossier **backend** afin d'avoir accès à la Base de données **MongoDB**.
+Il sera necessaire de créer un fichier `.env` dans le dossier **backend** afin d'avoir accès à la Base de données **MySQL**.
 
 Dans le fichier `.env`, il faudra coller une struture de code comme celle ci-dessou :
 
    ```js
-  TOKEN_KEY=SecretKeyToken
-
-  DB_CLUSTER=ClusterName
+  DB_NAME=DatabaseName
   DB_USER=UserName
   DB_PASS=Password
+
+  SECRET_KEY_TOKEN=SecretKeyToken
    ```
 
-&#x26A0; Pour des raisons de sécurité, il faudra demander les variables _SecretKeyToken_, _ClusterName_, _UserName_ et _Password_ pour avoir accès à la Base de données. [Cliquer ici](mailto:kevin.audibert26@gmail.com) :key:
+&#x26A0; Pour des raisons de sécurité, il faudra renseigner vos propres données dans les variables _SecretKeyToken_, _ClusterName_, _UserName_ et _Password_ pour avoir accès à la Base de données. :key:
 
 <h3 id="installation">&#x2699 Installation</h3>
 
