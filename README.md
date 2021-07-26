@@ -29,7 +29,7 @@
 
 <h2 id="apropos" align="center">À propos du Site</h2>
 
-<p align="center"><img src="./images_readme/screen.jpg" width="900px"></p>
+<p align="center"><img src="./images_readme/Screen.png" width="900px"></p>
 
 <p align="center">So Pekocko est une entreprise familiale de 10 salariés. Son activité principale est la création
 de sauces piquantes dont la composition est tenue secrète. Forte de son succès, l’entreprise
@@ -49,11 +49,9 @@ ajouter leurs sauces préférées et liker ou disliker les sauces proposées par
 
 <h3 id="doc">&#x1F4D4 Documentation</h3>
 
-<p>Lors de la réalisation du site, plusieurs régles ont dût être respectées. Ci-dessous les différents documents.</p>
+<p>Lors de la réalisation du site, plusieurs régles ont dût être respectées.</p>
 
 * [Cahier des charges](./images_readme/Groupomania_Specs_FR_DWJ_VF.pdf)
-
-* [Note de cadrage](./images_readme/P6_Note_cadrage.pdf)
 
 <h2 id="demarrage" align="center">Démarrage</h2>
 
