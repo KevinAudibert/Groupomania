@@ -129,7 +129,12 @@ Pour le fichier `config.json`, il faudra coller une structure de code comme cell
    npm install
    ```
 
-4. Démarrage du Server
+4. Création Tables dans la BDD
+   ```console
+   sequelize db:migrate
+   ```
+
+5. Démarrage du Server
    ```console
    nodemon server
    ```
