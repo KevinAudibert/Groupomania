@@ -65,7 +65,7 @@
 &#x1F6A8; **Attention** &#x1F6A8;
 ---
 
-Il sera necessaire de créer un fichier `.env` dans le dossier **backend** afin d'avoir accès à la Base de données **MySQL**.
+Il sera necessaire de créer un fichier `.env` dans le dossier **backend** et un fichier `config.json` dans le dossier **config** afin d'avoir accès à votre Base de données **MySQL**.
 
 Dans le fichier `.env`, il faudra coller une struture de code comme celle ci-dessou :
 
@@ -77,7 +77,22 @@ Dans le fichier `.env`, il faudra coller une struture de code comme celle ci-des
   SECRET_KEY_TOKEN=SecretKeyToken
    ```
 
-&#x26A0; Pour des raisons de sécurité, il faudra renseigner vos propres données dans les variables _SecretKeyToken_, _ClusterName_, _UserName_ et _Password_ pour avoir accès à la Base de données. :key:
+Pour le fichier `config.json`, il faudra coller une structure de code comme celle ci-dessou : 
+
+```json
+{
+  "development": {
+    "username": "UserName",
+    "password": "Password",
+    "database": "DatabaseName",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+```
+
+&#x26A0; Pour des raisons de sécurité, il faudra renseigner vos propres données à la place des variables _SecretKeyToken_, _DatabaseName_, _UserName_ et _Password_ pour avoir accès à votre Base de données. :key:
+
 
 <h3 id="installation">&#x2699 Installation</h3>
 
@@ -99,7 +114,7 @@ Dans le fichier `.env`, il faudra coller une struture de code comme celle ci-des
 
 4. Démarrage du Server de développement
    ```console
-   ng serve
+   npm run serve
    ```
 
 <h4>Backend :</h4>
@@ -125,7 +140,7 @@ Dans le fichier `.env`, il faudra coller une struture de code comme celle ci-des
 
 Pour avoir accès au frontend de l'application, rendez-vous sur : 
 
-[http://localhost:4200/signup](http://localhost:4200/signup)
+[http://localhost:8080](http://localhost:8080)
 
 <h2 id="dependence" align="center">&#x1F4E6 Dépendences NPM &#x1F4E6</h2></br>
 
@@ -134,18 +149,18 @@ Pour avoir accès au frontend de l'application, rendez-vous sur :
 | bcrypt                   | Cryptage des mots de passe                       |[bcrypt](https://www.npmjs.com/package/bcrypt)|
 | body-parser              | Parse des données JSON                           |[body-parser](https://www.npmjs.com/package/body-parser)       |
 | dotenv                   | Sécurisation des données accès BDD               |[dotenv](https://www.npmjs.com/package/dotenv)       |
-| email-validator          | Valide adresse mail                              |[email-validator](https://www.npmjs.com/package/email-validator) |
+| validator                | Valide adresse mail                              |[validator](https://www.npmjs.com/package/validator) |
 | express                  | Framework pour application                       |[express](https://www.npmjs.com/package/express)       |
+| express-rate-limit       | Sécurisation de l'application express            |[express-rate-limit](https://www.npmjs.com/package/express-rate-limit)       |
 | helmet                   | Sécurisation de l'application express            |[helmet](https://www.npmjs.com/package/helmet)       |
 | jsonwebtoken             | Création de TOKEN                                |[jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)       |
-| mongoose                 | Modélisation d'objets MongoDB                    |[mongoose](https://www.npmjs.com/package/mongoose)       |
-| mongoose-unique-validator| Validation de champs unique d'un Schéma Mongoose |[mongoose-unique-validator](https://www.npmjs.com/package/mongoose-unique-validator)       |
+| sequelize                | Outils ORM                    |[sequelize](https://www.npmjs.com/package/sequelize)       |
+| mysql2                   | Pilote NodeJs pour MySQL                    |[mysql2](https://www.npmjs.com/package/mysql2)       |
 | multer                   | Téléchargement de fichiers                       |[multer](https://www.npmjs.com/package/multer)       |
-| password-validator       | Valide Mot de passe selon spécifications         |[password-validator](https://www.npmjs.com/package/password-validator)       |
 
 
 <h2 id="contact" align="center">&#x1F4C7 Contact</h2>
 
 Adresse Email : [Kevin.audibert26@gmail.com](mailto:kevin.audibert26@gmail.com)
 
-Lien du Projet: [https://github.com/KevinAudibert/So_Pekocko](https://github.com/KevinAudibert/So_Pekocko)
+Lien du Projet: [https://github.com/KevinAudibert/Groupomania](https://github.com/KevinAudibert/Groupomania)
