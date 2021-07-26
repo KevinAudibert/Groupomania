@@ -1,7 +1,5 @@
-<P align="center"><img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png"  width="400px"/>
-</p>
-
 <h1 align="center">Groupomania - Projet 7</h1>
+<P align="center"><img src="https://user.oc-static.com/upload/2019/09/04/15676009353158_image2.png"  width="400px"/></p>
 <p align="center">Créer un Réseau Social d'Entreprise</p></br>
 
 <details open="open">
