@@ -155,6 +155,9 @@ Pour avoir accès au frontend de l'application, rendez-vous sur :
 | sequelize                | Outils ORM                    |[sequelize](https://www.npmjs.com/package/sequelize)       |
 | mysql2                   | Pilote NodeJs pour MySQL                    |[mysql2](https://www.npmjs.com/package/mysql2)       |
 | multer                   | Téléchargement de fichiers                       |[multer](https://www.npmjs.com/package/multer)       |
+| axios                    | Client HTTP basé sur la promesse pour le navigateur et node.js |[axios](https://www.npmjs.com/package/axios)       |
+| vue-router               | Ecosystème Vue                      |[vue-router](https://www.npmjs.com/package/vue-router)       |
+| vuex                     | Gestionnaire d'Etat + Bibliothèque Vue           |[vuex](https://www.npmjs.com/package/vuex)       |
 
 
 <h2 id="contact" align="center">&#x1F4C7 Contact</h2>
