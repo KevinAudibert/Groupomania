@@ -85,6 +85,20 @@ Pour le fichier `config.json`, il faudra coller une structure de code comme cell
     "database": "DatabaseName",
     "host": "127.0.0.1",
     "dialect": "mysql"
+  },
+    "test": {
+    "username": "UserName",
+    "password": "Password",
+    "database": "DatabaseName",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "UserName",
+    "password": "Password",
+    "database": "DatabaseName",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
   }
 }
 ```
