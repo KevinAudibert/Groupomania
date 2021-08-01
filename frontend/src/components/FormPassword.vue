@@ -1,5 +1,6 @@
 <template>
-    <h1 class="card-title">Modification du Mot de Passe</h1>
+<h1>Groupomania</h1>
+    <h2 class="card-title">Modification du Mot de Passe</h2>
 <div class="card">
         <div class="form-row">
             <label for="password">Mot de Passe Actuel</label>

@@ -1,9 +1,10 @@
 <template>
-    <h1> Liste des Utilisateurs </h1>
+<h1>Groupomania</h1>
+    <h2> Liste des Utilisateurs </h2>
         <div v-if="user.isAdmin == true">
             <div class="users" v-for="user in users" :key="user.id" >
-                <img v-if="user.avatar == null" src="../assets/avatar_null.png" />
-                <img v-else :src=user.avatar />
+                <img v-if="user.avatar == null" alt="image de profil par defaut" src="../assets/avatar_null.png" />
+                <img v-else :alt="'image de profil de ' + user.username" :src=user.avatar />
                 <h3>{{ user.username }}</h3>
                 <p>{{ user.email }}</p>
                 <button v-if="user.id != userId" @click="deleteUserForAdmin(user.id)"> Supprimer </button>
@@ -92,7 +93,7 @@ img {
 }
 
 button {
-  background: #2196F3;
+  background: #075697;
   color:white;
   border-radius: 8px;
   font-weight: 800;

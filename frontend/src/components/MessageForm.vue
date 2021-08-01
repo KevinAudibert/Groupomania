@@ -1,9 +1,10 @@
 <template>
-    <h1> Message </h1>
+<h1>Groupomania</h1>
+    <h2> Message </h2>
     <div class="card">
         <div class="posts">
             <h3>{{ post.title }}</h3>
-            <img class="img-post" :src=post.images />
+            <img class="img-post" alt="image du message" :src=post.images />
             <div class="user-info">
             <p>{{ post.content }}</p>
             <p> Publié par {{ post.username }} le {{ dateOfPost(post.createdAt) }}</p>
@@ -151,7 +152,7 @@ h1 {
 }
 
 button {
-  background: #2196F3;
+  background: #075697;
   color:white;
   border-radius: 8px;
   font-weight: 800;

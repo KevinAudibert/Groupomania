@@ -1,10 +1,11 @@
 <template>
-    <h1 class="card-title">Mes Informations</h1>
+<h1>Groupomania</h1>
+    <h2 class="card-title">Mes Informations</h2>
         <div class="card">
             <div class="image">
-                <img v-if="user.avatar == null" src="../assets/avatar_null.png" />
-                <img v-else :src=user.avatar />
-                <input class="file" type="file" ref="file" @change="selectFile()"/>
+                <img v-if="user.avatar == null" alt="image de profil par defaut" src="../assets/avatar_null.png" />
+                <img v-else alt="image de profil" :src=user.avatar />
+                <input aria-label="Selectionner une image" class="file" type="file" ref="file" @change="selectFile()"/>
             </div>
             <div class="infos">
                 <h3>Informations Personnelles</h3>
@@ -14,7 +15,7 @@
             </div>
             <div class="bio">
                 <h3>Biographie</h3>
-                <textarea id="biographie" placeholder="Ajoutez quelques lignes à votre Biographie"></textarea>
+                <textarea aria-label="Ecrire une présentation" id="biographie" placeholder="Ajoutez quelques lignes à votre Biographie"></textarea>
             </div>
             <div class="form-row">
                 <button @click="modifyProfil()" type="submit" class="button">

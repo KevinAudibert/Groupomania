@@ -1,14 +1,15 @@
 <template>
-    <h1> Nouveau Message </h1>
+<h1>Groupomania</h1>
+    <h2> Nouveau Message </h2>
     <div class="card">
         <div class="form-row">
-            <input v-model="title" class="form-row_input" type="text" placeholder="Titre" />
+            <input aria-label="Titre" v-model="title" class="form-row_input" type="text" placeholder="Titre" />
         </div>
         <div class="form-row">
-            <input v-model="content" class="form-row_input_content" type="text" placeholder="Contenu"/>
+            <input aria-label="Contenu du message" v-model="content" class="form-row_input_content" type="text" placeholder="Contenu"/>
         </div>
         <div class="form-row">
-            <input class="file" type="file" ref="file" @change="selectFile()"/>
+            <input aria-label="Choisir une image" class="file" type="file" ref="file" @change="selectFile()"/>
         </div>
         <div class="form-row">
             <button type="submit" class="button" @click="createNewMessage()">

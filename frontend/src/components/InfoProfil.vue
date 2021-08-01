@@ -1,15 +1,16 @@
 <template>
-    <h1 class="card-title">Mon Profil</h1>
+<h1>Groupomania</h1>
+    <h2 class="card-title">Mon Profil</h2>
         <div class="card">
-                <img v-if="user.avatar == null" src="../assets/avatar_null.png" />
-                <img v-else :src=user.avatar />
+                <img v-if="user.avatar == null" alt="image de profil par defaut" src="../assets/avatar_null.png" />
+                <img v-else alt="image de profil" :src=user.avatar />
             <div class="infos">
-                <h4>Prénom :</h4>
+                <h3>Prénom :</h3>
                 <p>{{ user.username }}</p>
-                <h4>Adresse mail :</h4>
+                <h3>Adresse mail :</h3>
                 <p>{{ user.email }}</p>
                 <div v-if="user.bio != '' && user.bio != null">
-                    <h4>A propos de moi :</h4>
+                    <h3>A propos de moi :</h3>
                     <p>{{ user.bio }}</p>
                 </div>
                 <div v-else>

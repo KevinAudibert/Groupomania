@@ -1,6 +1,7 @@
 <template>
+<main>
     <div class="logo">
-        <img src="../assets/icon-left-font-monochrome-black.svg">
+        <img alt="grand logo groupomania" src="../assets/icon-left-font-monochrome-black.svg">
     </div>
     <div class="card">
         <h1 class="card-title" v-if="mode == 'login'">Connexion</h1>
@@ -8,13 +9,13 @@
         <p class="card-subtitle" v-if="mode == 'login'">Tu n'as pas encore de compte ? <span class="card-action" @click="switchCreateAccount()">Créer un compte</span></p>
         <p class="card-subtitle" v-else>Tu as déjà un compte <span class="card-action" @click="switchLogAccount()">Se connecter</span></p>
         <div class="form-row">
-            <input v-model="email" class="form-row_input" type="text" placeholder="Adresse mail" />
+            <input aria-label="adresse Email" v-model="email" class="form-row_input" type="text" placeholder="Adresse mail" />
         </div>
         <div class="form-row" v-if="mode == 'create'">
-            <input v-model="username" class="form-row_input" type="text" placeholder="Pseudo"/>
+            <input aria-label="Prénom" v-model="username" class="form-row_input" type="text" placeholder="Pseudo"/>
         </div>
         <div class="form-row">
-            <input v-model="password" class="form-row_input" type="password" placeholder="Mot de Passe"/>
+            <input aria-label="mot de passe" v-model="password" class="form-row_input" type="password" placeholder="Mot de Passe"/>
         </div>
         <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
             Adresse mail et/ou mot de passe invalide
@@ -33,6 +34,7 @@
             </button>
         </div>
     </div>
+</main>
 </template>
 
 <script>
@@ -111,6 +113,12 @@ export default {
 
 <style scoped>
 
+main {
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+}
+
 .form-row {
     display: flex;
     margin: 16px 0px;
@@ -164,7 +172,7 @@ img {
   font-weight: 500;
 }
 .button {
-  background: #2196F3;
+  background: #075697;
   color:white;
   border-radius: 8px;
   font-weight: 800;
@@ -175,8 +183,8 @@ img {
   transition: .4s background-color;
 }
 .card-action {
-  color:#2196F3;
-  text-decoration: underline;
+  color:#075697;
+  /*text-decoration: underline;*/
 }
 .card-action:hover {
   cursor:pointer;
@@ -187,7 +195,7 @@ img {
 }
 .button-disabled {
   background:#cecece;
-  color:#ececec
+  color:#000000
 }
 .button-disabled:hover {
   cursor:not-allowed;

@@ -1,9 +1,10 @@
 <template>
-    <h1> Actualités </h1>
+    <h1>Groupomania</h1>
+    <h2> Actualités</h2>
     <div v-if="posts.length != 0" class="card">
         <div class="posts" v-for="post in posts" :key="post.id" >
             <h3>{{ post.title }}</h3>
-            <img class="img-post" :src=post.images />
+            <img class="img-post" :alt="'image du message ' + post.id" :src=post.images />
             <div class="user-info">
             <p>{{ post.content }}</p>
             <p> Publié par {{ post.username }} le {{ dateOfPost(post.createdAt) }}</p>
@@ -134,7 +135,7 @@ i {
 }
 
 button {
-  background: #2196F3;
+  background: #075697;
   color:white;
   border-radius: 8px;
   font-weight: 800;

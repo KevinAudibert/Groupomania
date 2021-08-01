@@ -1,20 +1,20 @@
 <template>
-  <div class="navbar">
-      <img class="mini-logo" src="../assets/icon.svg">
+  <nav class="navbar">
+      <img class="mini-logo" alt="logo-Groupomania" src="../assets/icon.svg">
     <div class="navigation-link">
       <ul>
         <li>
-            <router-link to='/profile' class="fas fa-user-circle"></router-link>
+            <router-link to='/profile' title="Voir le profil" class="fas fa-user-circle"></router-link>
         </li>
         <li>
-            <router-link to='/createmessage' class="far fa-edit"></router-link>
+            <router-link to='/createmessage' title="Ecrire un message" class="far fa-edit"></router-link>
         </li>
         <li>
-          <a @click= "logout()" class="fas fa-sign-in-alt"></a>
+          <a @click= "logout()" title="Se déconnecter" class="fas fa-sign-in-alt"></a>
         </li>
       </ul>
     </div>
-  </div>
+  </nav>
 </template>
 
 <script>

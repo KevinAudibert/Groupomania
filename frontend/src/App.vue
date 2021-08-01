@@ -34,7 +34,7 @@ body {
 }
 
 .button {
-  background: #2196F3;
+  background: #075697;
   color:white;
   border-radius: 8px;
   font-weight: 800;
@@ -46,7 +46,7 @@ body {
 }
 .card-action {
   color:#2196F3;
-  text-decoration: underline;
+  /*text-decoration: underline;*/
 }
 .card-action:hover {
   cursor:pointer;

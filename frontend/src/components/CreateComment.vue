@@ -2,7 +2,7 @@
     <div class="card-comment">
         <h3> Ajouter un Commentaire </h3>
         <div class="form-row">
-            <textarea v-model="content" class="form-row_input" type="text" placeholder="Contenu" rows="2" cols="20"></textarea>
+            <textarea v-model="content" class="form-row_input" type="text" aria-label="Ajouter un commentaire" placeholder="Contenu" rows="2" cols="20"></textarea>
         </div>
         <div class="form-row">
             <button type="submit" class="button" @click="createComment()">
